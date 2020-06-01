@@ -4,6 +4,9 @@ class Player extends Fish {
         this._ctx = ctx;
         this.color = 'yellow';
 
+        this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
+        this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
+
         this._setListeners()
     }
 

@@ -4,10 +4,13 @@ class Game {
         this.intervalId;
         this.intervalCounter = 0;
 
+        this.fishfood = [];
         this.player = new Player();
         this.allFish = [];
     }
     start() {
+        for (let i = 0; i< 5; i++) this.allFish.push(new Fish(ctx));
+
         this.intervalId =  setInterval(() => {
             this._clear();
             this._draw();
@@ -16,6 +19,9 @@ class Game {
             this._checkForCollision();
             if (this.intervalCounter == 0 || this.intervalCounter % 300 === 0) {
                 this.allFish.push(new Fish(ctx))
+            }
+            if (this.intervalCounter % 1200 === 0 && this.intervalCounter !== 0) {
+               this._generateFood();
             }
             this.intervalCounter++;
           }, 1000 / 60);    
@@ -26,13 +32,20 @@ class Game {
     }
 
     _draw() {
+        this.fishfood.forEach( food => food._draw());
         this.allFish.forEach( fish => fish._draw());
         this.player._draw();
     }
 
     _move() {
+        this.fishfood.forEach( food => food._move());
         this.allFish.forEach( fish => fish._move());
         this.player._move()
+    }
+
+    _generateFood() {
+        const amount = Math.floor(Math.random() * 3 + 2);
+        for (let i = 0; i<= amount; i++) this.fishfood.push(new Fishfood(ctx));
     }
 
     _checkIfGettingSmaller() {
@@ -42,11 +55,11 @@ class Game {
     }
 
     _checkIfDead() {
-        if (this.player.isDead = true) {
-            //this._gameOver();
+        if (this.player.isDead === true) {
+            this._gameOver();
         }
         this.allFish.forEach( fish => {
-            if (fish.isDead = true) {
+            if (fish.isDead === true) {
                 this.allFish = this.allFish.filter( f => f !== fish);
             }
         });

@@ -1,4 +1,4 @@
-# fishGame
+# Fish Game
 
 ## Basic rules:
 
@@ -10,7 +10,7 @@
 
 ### Jollies:
 
-- fish food
+- fish food (watch out, only the yellow food is good for you)
 - sleeping small fish
 
 ### Obstacles:
