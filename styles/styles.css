@@ -8,9 +8,64 @@ html, body {
 body {
     width: 100vw;
     text-align: center;
+    background-color: #FFF3CA;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100vw;
+    justify-content: center;
+}
+
+header {
+    color: purple;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100vw;
+    justify-content: center;
+}
+
+#energy-area {
+    display: flex;
+    align-items: flex-end;
+    margin-right: 2rem;
+    width: 2rem;
+    border: 2px solid purple;
+    margin-bottom: 20px;
+    box-shadow: 10px 10px 8px #888888;
+
+}
+
+#progress-bar {
+    width: 2rem;
+    height: 100%;
+    background-color: purple;
 }
 
 #canvas {
-    margin-top: 10rem;
-    background-color: darkblue;
+    background-image: linear-gradient(#AADBF7, #3A89B7 25%, #003C5F, #FFF3CA); /*#005484 */
+    box-shadow: 10px 10px 8px #888888;
+    margin-bottom: 20px;
+}
+
+#bonus-area {
+    display: flex;
+    align-items: flex-end;
+    margin-left: 2rem;
+    width: 2rem;
+    border: 2px solid purple;
+    box-shadow: 10px 10px 8px #888888;
+    margin-bottom: 20px;
+}
+
+#bonusses {
+    width: 2rem;
+    height: 0%;
+    background-color: purple;
 }

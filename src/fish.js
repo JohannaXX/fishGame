@@ -3,19 +3,24 @@ class Fish {
         this._ctx = ctx;
         this.eatingIntervalId;
         this.eatingTimer = 0;
+        this.energy = 100;
+
         this.changeDirectionTimerId;
         this.changeDirectionTimer = 0;
         this.isDead = false;
+
+        this._img = new Image;
+        this._img.src = '../images/fishOne.png';
 
         
         this.x = 0;
         this.y = 0;
         this.w = Math.floor(Math.random() * 50 + 30);
-        this.h = this.w / 2;
+        this.h = this.w / 1.2;
         this.vx = 0;
         this.vy = 0;
 
-        this.color = 'purple';
+        this.color = 'red';
         
         this._start();
         this._setEatingTimer();
@@ -45,10 +50,14 @@ class Fish {
     }
 
     _draw() {
-        this._ctx.beginPath();
+        //this._ctx.drawImage(this._img, this.x, this.y, this.w, this.h)
+        this._ctx.drawImage(this._img, 0, 0, this._img.width / 6, this._img.height / 4, this.x, this.y, this.w, this.h);
+            /* sx, sy, sw, sh,
+            dx, dy, dw, dh); */
+        /* this._ctx.beginPath();
         this._ctx.fillStyle = this.color;
         this._ctx.fillRect(this.x, this.y, this.w, this.h); 
-        this._ctx.fill();
+        this._ctx.fill(); */
     }
 
     _changeDirection() {
@@ -76,14 +85,16 @@ class Fish {
     }
 
     _eating() {
+        this.energy = 100;
         this.w *= 1.1;
         this.h *= 1.1;
     }
 
     _checkIfGettingSmaller() {
-        if (this.eatingTimer % 5 === 0) {
-            this.w -= 0.02;
-            this.h -= 0.02;
+        if (this.eatingTimer % 2 === 0) {
+            this.energy -= 0.05;
+            this.w -= 0.01;
+            this.h -= 0.01;
             /* if(this.w < 5 || this.h < 5) {
                 this.isDead = true;
             } */

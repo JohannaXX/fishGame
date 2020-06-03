@@ -2,12 +2,16 @@ class Player extends Fish {
     constructor() {
         super(ctx);
         this._ctx = ctx;
-        this.color = 'yellow';
+        this.bonus = 0;
 
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
 
         this._setListeners()
+    }
+
+    _draw() {
+        this._ctx.drawImage(this._img, 0, this._img.height / 4, this._img.width / 6, this._img.height / 4, this.x, this.y, this.w, this.h);
     }
 
     _setListeners() {
@@ -64,5 +68,23 @@ class Player extends Fish {
                     break; */
           }
         })
+    }
+
+    _checkEnergyLevel() {
+        const progressBar = document.getElementById('progress-bar');
+        progressBar.style.height = (`${this.energy}%`);
+    }
+
+    _updateBonus(update) {
+        const bonusArea = document.getElementById('bonusses');
+        bonusArea.style.height = (`${this.bonus}%`);
+        switch(update) {
+            case 'add':
+                this.bonus += 0.05;
+                break;
+            case 'subtract':
+                this.bonus -= 5;
+                break;
+        }
     }
 }

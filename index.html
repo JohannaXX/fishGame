@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" type="text/css" href="./styles/styles.css" media="screen" />
-    <title>Fish Game</title>
-  </head>
-  <body>
-    <canvas id="canvas" width="800" height="600"></canvas>
-    <script type="text/javascript" src="./src/fish.js"></script>
-    <script type="text/javascript" src="./src/fishfood.js"></script>
-    <script type="text/javascript" src="./src/player.js"></script>
-    <script type="text/javascript" src="./src/game.js"></script>
-    <script type="text/javascript" src="./src/index.js"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" type="text/css" href="./styles/styles.css" media="screen" />
+        <title>The Fish Game</title>
+    </head>
+    <body>
+            <div class="container">
+                <header>
+                    <h1>The Fish Game</h1>
+                </header>
+                <main>
+                    <div id="energy-area">
+                        <div id="progress-bar"></div>
+                    </div>
+                    <canvas id="canvas" width="1000" height="700"></canvas>
+                    <div id="bonus-area">
+                        <div id="bonusses"></div>
+                    </div>
+                </main>
+            </div>
+    
+            <script type="text/javascript" src="./src/fish.js"></script>
+            <script type="text/javascript" src="./src/orca.js"></script>
+            <script type="text/javascript" src="./src/enemy.js"></script>
+            <script type="text/javascript" src="./src/player.js"></script>
+            <script type="text/javascript" src="./src/fishfood.js"></script>
+            <script type="text/javascript" src="./src/background.js"></script>
+            <script type="text/javascript" src="./src/game.js"></script>
+            <script type="text/javascript" src="./src/index.js"></script>
+    </body>
 </html>
