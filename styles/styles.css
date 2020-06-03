@@ -20,7 +20,7 @@ body {
 }
 
 header {
-    color: purple;
+    color: #003C5F;
 }
 
 main {
@@ -33,19 +33,23 @@ main {
 
 #energy-area {
     display: flex;
-    align-items: flex-end;
-    margin-right: 2rem;
+    align-items: flex-start;
     width: 2rem;
-    border: 2px solid purple;
+    margin-right: 2rem;
     margin-bottom: 20px;
-    box-shadow: 10px 10px 8px #888888;
+   /*  border: 2px solid #003C5F; */
+    border-radius: 1rem;
+    background-image: linear-gradient(green 50%, red);
+    /* box-shadow: 10px 10px 8px #888888; */
 
 }
 
 #progress-bar {
     width: 2rem;
     height: 100%;
-    background-color: purple;
+    background-color: #FFF3CA;
+    /* background-image: linear-gradient(green, red 30%); */
+    /* background-image: linear-gradient( #FFF3CA 90%, transparent);  */
 }
 
 #canvas {
@@ -56,16 +60,16 @@ main {
 
 #bonus-area {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     margin-left: 2rem;
     width: 2rem;
-    border: 2px solid purple;
-    box-shadow: 10px 10px 8px #888888;
+    border-radius: 1rem;
     margin-bottom: 20px;
+    background-image: linear-gradient(yellow 20%, #003C5F 60%);
 }
 
 #bonusses {
     width: 2rem;
-    height: 0%;
-    background-color: purple;
+    height: 100%;
+    background-color: #FFF3CA;
 }

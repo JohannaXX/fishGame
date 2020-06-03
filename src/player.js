@@ -72,19 +72,22 @@ class Player extends Fish {
 
     _checkEnergyLevel() {
         const progressBar = document.getElementById('progress-bar');
-        progressBar.style.height = (`${this.energy}%`);
+       /*  background-image: linear-gradient( #FFF3CA , transparent);  */
+       /*  progressBar.style.backgroundImage = (`#FFF3CA ${this.energy}%, transparent`); */
+        progressBar.style.height = (`${100-this.energy}%`);
+        if (this.energy <= 0) this.isDead = true;
     }
 
     _updateBonus(update) {
         const bonusArea = document.getElementById('bonusses');
-        bonusArea.style.height = (`${this.bonus}%`);
         switch(update) {
             case 'add':
-                this.bonus += 0.05;
+                this.bonus += 10;
                 break;
             case 'subtract':
-                this.bonus -= 5;
+                this.bonus -= 10;
                 break;
         }
+        bonusArea.style.height = (`${100-this.bonus}%`);
     }
 }

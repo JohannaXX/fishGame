@@ -21,18 +21,22 @@ class Game {
             this._move();
             this._checkIfGettingSmaller();
             this._checkForCollision();
-            if (this.intervalCounter % 300 === 0) {
-                this.allFish.push(new Fish(ctx))
+            if (this.intervalCounter % 150 === 0) {
+                this.allFish.push(new Fish(ctx));
+                
             }
-            if (this.intervalCounter % 400 === 0) {
+            if (this.intervalCounter % 500 === 0) {
                 this.allEnemies.push(new Enemy(ctx))
             }
             if (this.intervalCounter % 1200 === 0 && this.intervalCounter !== 0) {
                this._generateFood();
             }
-            /* if (this.intervalCounter % 30 === 0) {
+            if (this.intervalCounter % 2000 === 0 && this.intervalCounter !== 0) {
+                this._clearAllOutOfSight();
+            }
+            if (this.intervalCounter % 5000 === 0) {
                 this.orca = new Orca(ctx);
-            } */
+            }
             this.intervalCounter++;
             this.player._checkEnergyLevel();
           }, 1000 / 60);    
@@ -42,6 +46,33 @@ class Game {
         this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
     }
 
+    _clearAllOutOfSight() {
+        this.allEnemies.forEach( enemy => {
+            if (enemy.x < 0 || 
+                enemy.x + enemy.w > this._ctx.canvas.width || 
+                enemy.y < 0 || 
+                enemy.y + enemy.h > this._ctx.canvas.height ) {
+                    this.allEnemies = this.allEnemies.filter( e => e !== enemy);
+            }
+        })
+        this.fishfood.forEach( food => {
+            if (food.x < 0 || 
+                food.x + food.w > this._ctx.canvas.width || 
+                food.y < 0 || 
+                food.y + food.h > this._ctx.canvas.height ) {
+                    this.fishfood = this.fishfood.filter( f => f !== food);
+            }
+        })
+        this.allFish.forEach( fish => {
+            if (fish.x < 0 || 
+                fish.x + fish.w > this._ctx.canvas.width || 
+                fish.y < 0 || 
+                fish.y + fish.h > this._ctx.canvas.height ) {
+                    this.allFish = this.allFish.filter( f => f !== fish);
+            }
+        })
+    }
+    
     _draw() {
         this.background._draw();
         this.orca._draw();
@@ -71,15 +102,9 @@ class Game {
         this._checkIfDead();
     }
 
-    _hitCanvasBorder() {
-        if (this.player.x <= 0 || (this.player.x + this.player.w) >= this._ctx.canvas.width || 
-            this.player.y <= 0 || (this.player.y + this.player.h) >= this._ctx.canvas.height ) {
-                this._gameOver();
-            }
-    }
-
     _checkForCollision() {
-        this. _hitCanvasBorder();
+        this._hitCanvasBorder();
+        this._checkForFoodCollision();
 
         this.allEnemies.forEach( enemy => {
             const collXWithPlayer = enemy.x < (this.player.x + this.player.w) && (enemy.x + enemy.w) > this.player.x;
@@ -88,55 +113,73 @@ class Game {
                 this._gameOver();
             }
 
-            /* this.allFish.forEach( fish => {
-                const collXWithEnemy = fish.x < (enemy.x + enemy.w) && (fish.x + fish.w) > enemy.x;
-                const collYWithEnemy = (fish.y + fish.h) > enemy.y && fish.y < (enemy.y + enemy.h);
-                if(collXWithEnemy && collYWithEnemy) {
-                    if (enemy.w * enemy.h > fish.w * fish.h ) {
-                        enemy._eating();
-                    } 
+            this.allFish.forEach( fish => {
+                const collXWithEnemy = enemy.x < (fish.x + fish.w) && (enemy.x + enemy.w) > fish.x;
+                const collYWithEnemy = (enemy.y + enemy.h) > fish.y && enemy.y < (fish.y + fish.h);
+                if(collXWithEnemy && collYWithEnemy && fish.x > 50 && fish.x < this._ctx.canvas.width - 50) {
+                    enemy._eating();
+                    this.allFish = this.allFish.filter( f => f !== fish);
                 }
-            }) */
+            })
         });
 
         this.allFish.forEach( fish => {
             const collXWithPlayer = fish.x < (this.player.x + this.player.w) && (fish.x + fish.w) > this.player.x;
             const collYWithPlayer = (fish.y + fish.h) > this.player.y && fish.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                if (fish.w * fish.h > this.player.w * this.player.h) {
+                if (this.player.w * this.player.h < fish.w * fish.h) {
                     this._gameOver();
                 } else {
                     this.player._eating();
                     this.allFish = this.allFish.filter( f => f !== fish);
                 }
             }
-
-            /* this.allFish.filter(allTheOthers => allTheOthers !== fish).forEach( otherFish => {
-                const collXWithOtherFish = fish.x < (otherFish.x + otherFish.w) && (fish.x + fish.w) > otherFish.x;
-                const collYWithOtherFish = (fish.y + fish.h) > otherFish.y && fish.y < (otherFish.y + otherFish.h);
-                if(collXWithOtherFish && collYWithOtherFish) {
-                    if (fish.w * fish.h > otherFish.w * otherFish.h) {
-                        fish._eating();
-                        this.allFish = this.allFish.filter( f => f !== otherFish);
-                    } else {
-                        otherFish._eating();
-                        this.allFish = this.allFish.filter( f => f !== fish);
-                    }
-                }
-            }) */
         });
+    }
 
-        this.fishfood.forEach( food => {
-            const collXWithPlayer = food.x < (this.player.x + this.player.w) && (food.x + food.r) > this.player.x;
-            const collYWithPlayer = (food.y + food.r) > this.player.y && food.y < (this.player.y + this.player.h);
+    _checkForFoodCollision() {
+        this.fishfood.forEach( foodBall => {
+            const collXWithPlayer = foodBall.x < (this.player.x + this.player.w) && (foodBall.x + foodBall.r) > this.player.x;
+            const collYWithPlayer = (foodBall.y + foodBall.r) > this.player.y && foodBall.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                if (food.color === 'yellow') {
+                if (foodBall.color === 'yellow') {
                     this.player._updateBonus('add');
+                    this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
                 } else {
                     this.player._updateBonus('subtract');
+                    this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
                 }
             }
         })
+
+        this.fishfood.forEach( foodBall => {
+            this.allFish.forEach( fish => {
+                const collXWithPlayer = foodBall.x < (fish.x + fish.w) && (foodBall.x + foodBall.r) > fish.x;
+                const collYWithPlayer = (foodBall.y + foodBall.r) > fish.y && foodBall.y < (fish.y + fish.h);
+                if(collXWithPlayer && collYWithPlayer) {
+                    this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
+                }
+            });
+        })
+
+        this.fishfood.forEach( foodBall => {
+            this.allEnemies.forEach( enemy => {
+                const collXWithPlayer = foodBall.x < (enemy.x + enemy.w) && (foodBall.x + foodBall.r) > enemy.x;
+                const collYWithPlayer = (foodBall.y + foodBall.r) > enemy.y && foodBall.y < (enemy.y + enemy.h);
+                if(collXWithPlayer && collYWithPlayer) {
+                    this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
+                }
+            });
+        })
+    }
+
+    _hitCanvasBorder() {
+        if (this.player.x <= 0 || 
+            this.player.x + this.player.w >= this._ctx.canvas.width || 
+            this.player.y <= 0 || 
+            this.player.y + this.player.h >= this._ctx.canvas.height ) {
+            this._gameOver();
+        }
     }
 
     _checkIfDead() {
@@ -156,5 +199,8 @@ class Game {
         this._ctx.textAlign = 'center';
         this._ctx.font = '6rem Arial';
         this._ctx.fillText('Game over!', this._ctx.canvas.width / 2 , this._ctx.canvas.height / 2)
+        console.log(this.allEnemies);
+        console.log(this.fishfood);
+        console.log(this.allFish);
     }
 }

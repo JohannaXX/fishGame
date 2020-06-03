@@ -12,9 +12,6 @@ class Fish {
         this._img = new Image;
         this._img.src = '../images/fishOne.png';
 
-        
-        this.x = 0;
-        this.y = 0;
         this.w = Math.floor(Math.random() * 50 + 30);
         this.h = this.w / 1.2;
         this.vx = 0;
@@ -29,20 +26,20 @@ class Fish {
 
     _start() {
         const startFromLeft = () => {
-            this.x = 0;
-            this.y = Math.floor(Math.random() * (this._ctx.canvas.height - this.h));
+            this.x = 0- this.w;
+            this.y =  Math.floor(Math.random() * 200 + 100);
             this.vx = Math.random();
             this.vy = (Math.random() * (Math.random() < 0.5 ? -1 : 1)) / 3 + 0.3;
         }
 
         const startFromRight = () => {
             this.x = this._ctx.canvas.width;
-            this.y = Math.floor(Math.random() * 200 + 100);;
+            this.y = Math.floor(Math.random() * 200 + 100);
             this.vx = Math.random() * -1;
             this.vy = (Math.random() * (Math.random() < 0.5 ? -1 : 1)) / 3 + 0.3;
         }
 
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.5)  {
             startFromLeft();
         } else {
             startFromRight();
@@ -91,8 +88,8 @@ class Fish {
     }
 
     _checkIfGettingSmaller() {
-        if (this.eatingTimer % 2 === 0) {
-            this.energy -= 0.05;
+        if (this.eatingTimer % 20 === 0) {
+            this.energy -= 0.1;
             this.w -= 0.01;
             this.h -= 0.01;
             /* if(this.w < 5 || this.h < 5) {
