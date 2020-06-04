@@ -4,6 +4,9 @@ class Player extends Fish {
         this._ctx = ctx;
         this.bonus = 0;
 
+        this._img = new Image;
+        this._img.src = '../images/player.png';
+
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
 
@@ -11,7 +14,7 @@ class Player extends Fish {
     }
 
     _draw() {
-        this._ctx.drawImage(this._img, 0, this._img.height / 4, this._img.width / 6, this._img.height / 4, this.x, this.y, this.w, this.h);
+        this._ctx.drawImage(this._img, 0, this._img.height / 2, this._img.width / 6, this._img.height / 2, this.x, this.y, this.w, this.h);
     }
 
     _setListeners() {
