@@ -89,10 +89,10 @@ class Game {
         this.background._move();
         this.orca._move();
         this.fishfood.forEach( food => food._move());
-        this.allJellyfish.forEach( jf => jf._move());
-        this.allEnemies.forEach( enemy => enemy._move())
         this.allFish.forEach( fish => fish._move());
         this.player._move()
+        this.allJellyfish.forEach( jf => jf._move());
+        this.allEnemies.forEach( enemy => enemy._move())
     }
 
     _generateFood() {
@@ -114,15 +114,27 @@ class Game {
             const collXWithPlayer = enemy.x < (this.player.x + this.player.w) && (enemy.x + enemy.w) > this.player.x;
             const collYWithPlayer = (enemy.y + enemy.h) > this.player.y && enemy.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                this._gameOver();
+                if ((enemy.x + enemy.w) < (this.player.x + this.player.w/2) && enemy.movesToLeft === false) {
+                    this._gameOver();
+                }
+                if (enemy.x > (this.player.x + this.player.w/2) && enemy.movesToLeft) {
+                    this._gameOver();
+                } 
+               
             }
 
             this.allFish.forEach( fish => {
                 const collXWithEnemy = enemy.x < (fish.x + fish.w) && (enemy.x + enemy.w) > fish.x;
                 const collYWithEnemy = (enemy.y + enemy.h) > fish.y && enemy.y < (fish.y + fish.h);
                 if(collXWithEnemy && collYWithEnemy && fish.x > 50 && fish.x < this._ctx.canvas.width - 50) {
-                    enemy._eating();
-                    this.allFish = this.allFish.filter( f => f !== fish);
+                    if ((enemy.x + enemy.w) < (fish.x + fish.w/2) && enemy.movesToLeft === false) {
+                        enemy._eating();
+                        this.allFish = this.allFish.filter( f => f !== fish);
+                    }
+                    if (enemy.x > (fish.x + fish.w/2) && enemy.movesToLeft) {
+                        enemy._eating();
+                        this.allFish = this.allFish.filter( f => f !== fish);
+                    } 
                 }
             })
         });
@@ -131,12 +143,28 @@ class Game {
             const collXWithPlayer = fish.x < (this.player.x + this.player.w) && (fish.x + fish.w) > this.player.x;
             const collYWithPlayer = (fish.y + fish.h) > this.player.y && fish.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                if (this.player.w * this.player.h < fish.w * fish.h) {
-                    this._gameOver();
-                } else {
+                if ((this.player.x + this.player.w) < (fish.x + fish.w/2) 
+                && this.player.movesToLeft === false
+                && this.player._openMouth() === true) {
                     this.player._eating();
                     this.allFish = this.allFish.filter( f => f !== fish);
                 }
+                if (this.player.x > (fish.x + fish.w/2) 
+                && this.player.movesToLeft
+                && this.player._openMouth() === true) {
+                    this.player._eating();
+                    this.allFish = this.allFish.filter( f => f !== fish);
+                } 
+            }
+        });
+
+        this.allJellyfish.forEach( jellyfish => {
+            const collXWithPlayer = jellyfish.x < (this.player.x + this.player.w) && (jellyfish.x + jellyfish.w) > this.player.x;
+            const collYWithPlayer = (jellyfish.y + jellyfish.h) > this.player.y && jellyfish.y < (this.player.y + this.player.h);
+            if(collXWithPlayer && collYWithPlayer) {
+               this.player._updateStrength('subtract');
+               this.player.w *= 0.99;
+               this.player.h *= 0.99;
             }
         });
     }
@@ -147,10 +175,10 @@ class Game {
             const collYWithPlayer = (foodBall.y + foodBall.r) > this.player.y && foodBall.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
                 if (foodBall.color === 'yellow') {
-                    this.player._updateBonus('add');
+                    this.player._updateStrength('add');
                     this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
                 } else {
-                    this.player._updateBonus('subtract');
+                    this.player._updateStrength('subtract');
                     this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
                 }
             }
@@ -164,9 +192,7 @@ class Game {
                     this.fishfood = this.fishfood.filter( fd => fd !== foodBall);
                 }
             });
-        })
 
-        this.fishfood.forEach( foodBall => {
             this.allEnemies.forEach( enemy => {
                 const collXWithPlayer = foodBall.x < (enemy.x + enemy.w) && (foodBall.x + foodBall.r) > enemy.x;
                 const collYWithPlayer = (foodBall.y + foodBall.r) > enemy.y && foodBall.y < (enemy.y + enemy.h);

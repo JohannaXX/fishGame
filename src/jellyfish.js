@@ -10,6 +10,10 @@ class Jellyfish extends Fish {
         this._img.frameIndex = 0;
         this._frameCounter = 0;
 
+        this.w = 60;
+        this.h = 35;
+        this.vx = 15;
+
         this._start();
     }
 

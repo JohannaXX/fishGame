@@ -60,7 +60,7 @@ main {
     margin-bottom: 20px;
 }
 
-#bonus-area {
+#strength-area {
     display: flex;
     align-items: flex-start;
     margin-left: 2rem;
@@ -70,8 +70,8 @@ main {
     background-image: linear-gradient(yellow 20%, #003C5F 60%);
 }
 
-#bonusses {
+#strength {
     width: 2rem;
-    height: 100%;
+    height: 50%;
     background-color: #FFF3CA;
 }

@@ -3,7 +3,6 @@ class Enemy extends Fish {
         super(ctx);
         this.eatingIntervalId;
         this.eatingTimer = 0;
-        this.energy = 100;
 
         this._img = new Image;
         this._img.src = '../images/enemy.png';
@@ -64,7 +63,6 @@ class Enemy extends Fish {
                 this._img.rowCutIndex = 2;
             }, 400);
         }
-        this.energy = 100;
         this.w *= 1.1;
         this.h *= 1.1;
     }

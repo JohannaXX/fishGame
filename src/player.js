@@ -2,10 +2,12 @@ class Player extends Enemy {
     constructor() {
         super(ctx);
         this._ctx = ctx;
-        this.bonus = 0;
+        this.energy = 100;
+        this.strength = 50;
 
         this._img = new Image;
         this._img.src = '../images/player.png';
+        this._img.style.border = '2px solid red';
         this._img.frames = 6;
         this._img.frameIndex = 0;
         this._img.rows = 5;
@@ -19,6 +21,7 @@ class Player extends Enemy {
         this._setListeners();
         this._openMouth();
         this._closeMouth();
+        this._updateStrength();
     }
 
     _animation() {
@@ -32,8 +35,26 @@ class Player extends Enemy {
         }
     };
 
+    _eating() {
+        if (this.movesToLeft) {
+            this._img.frameIndex = 0; 
+            this._img.rowCutIndex = 1;
+            setTimeout(() => {
+                this._img.rowCutIndex = 0;
+            }, 400);
+        } else {
+            this._img.frameIndex = 0; 
+            this._img.rowCutIndex = 3;
+            setTimeout(() => {
+                this._img.rowCutIndex = 2;
+            }, 400);
+        } 
+        this.energy = 100;
+        this.w *= 1.1;
+        this.h *= 1.1;
+    }
+
     _openMouth() {
-        console.log('ok')
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -64,19 +85,19 @@ class Player extends Enemy {
             switch (e.keyCode) {
                 case UP:
                     this.y -= 5;
-                    this.vy -= 0.1;
+                    this.vy -= 1;
                     break
                 case DOWN:
                     this.y += 5;
-                    this.vy += 0.1;
+                    this.vy += 1;
                     break
                 case RIGHT:
                     this.x += 5
-                    this.vx += 0.1;
+                    this.vx += 1;
                     break
                 case LEFT:
                     this.x -= 5
-                    this.vx -= 0.1;
+                    this.vx -= 1;
                     break
                 case SPACE:
                     this._openMouth()
@@ -117,16 +138,16 @@ class Player extends Enemy {
         if (this.energy <= 0) this.isDead = true;
     }
 
-    _updateBonus(update) {
-        const bonusArea = document.getElementById('bonusses');
+    _updateStrength(update) {
+        const strengthArea = document.getElementById('strength');
         switch(update) {
             case 'add':
-                this.bonus += 10;
+                this.strength += 10;
                 break;
             case 'subtract':
-                this.bonus -= 10;
+                this.strength -= 0.1;
                 break;
         }
-        bonusArea.style.height = (`${100-this.bonus}%`);
+        strengthArea.style.height = (`${100-this.strength}%`);
     }
 }

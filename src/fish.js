@@ -17,8 +17,8 @@ class Fish {
 
         this.w = Math.floor(Math.random() * 50 + 30);
         this.h = this.w / 1.2;
-        this.vx = 0;
-        this.vy = 0;
+        this.vx = (Math.random() * 5) + 1 ;
+        this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
 
         this.color = 'red';
         
@@ -30,14 +30,12 @@ class Fish {
         if (this.movesToLeft) {
             this.x = this._ctx.canvas.width;
             this.y = Math.floor(Math.random() * 200 + 100);
-            this.vx = Math.random() * -4;
-            this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
+            this.vx *= (-1);
+            this.vy *= (-1);
             this.movesToLeft = true;
         } else {
             this.x = 0- this.w;
             this.y =  Math.floor(Math.random() * 200 + 100);
-            this.vx = Math.random() * 4;
-            this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
         }
     }
 
