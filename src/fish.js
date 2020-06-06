@@ -1,16 +1,19 @@
 class Fish {
     constructor(ctx) {
         this._ctx = ctx;
-        this.eatingIntervalId;
-        this.eatingTimer = 0;
-        this.energy = 100;
 
+        this.movesToLeft = (Math.random() < 0.5) ? false : true ;
         this.changeDirectionTimerId;
         this.changeDirectionTimer = 0;
         this.isDead = false;
 
         this._img = new Image;
-        this._img.src = '../images/fishOne.png';
+        const getRandomImage = Math.ceil(Math.random() * 4);
+        this._img.src = `../images/fish${getRandomImage}.png`;
+        this._img.frames = 6;
+        this._img.rows = 2;
+        this._img.frameIndex = 0;
+        this._img.imageRowCut;
 
         this.w = Math.floor(Math.random() * 50 + 30);
         this.h = this.w / 1.2;
@@ -20,45 +23,61 @@ class Fish {
         this.color = 'red';
         
         this._start();
-        this._setEatingTimer();
         this._changeDirection();
     }
 
     _start() {
-        const startFromLeft = () => {
-            this.x = 0- this.w;
-            this.y =  Math.floor(Math.random() * 200 + 100);
-            this.vx = Math.random();
-            this.vy = (Math.random() * (Math.random() < 0.5 ? -1 : 1)) / 3 + 0.3;
-        }
-
-        const startFromRight = () => {
+        if (this.movesToLeft) {
             this.x = this._ctx.canvas.width;
             this.y = Math.floor(Math.random() * 200 + 100);
-            this.vx = Math.random() * -1;
-            this.vy = (Math.random() * (Math.random() < 0.5 ? -1 : 1)) / 3 + 0.3;
-        }
-
-        if (Math.random() < 0.5)  {
-            startFromLeft();
+            this.vx = Math.random() * -4;
+            this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
+            this.movesToLeft = true;
         } else {
-            startFromRight();
+            this.x = 0- this.w;
+            this.y =  Math.floor(Math.random() * 200 + 100);
+            this.vx = Math.random() * 4;
+            this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
         }
     }
 
-    _draw() {
-        //this._ctx.drawImage(this._img, this.x, this.y, this.w, this.h)
-        this._ctx.drawImage(this._img, 0, 0, this._img.width / 6, this._img.height / 2, this.x, this.y, this.w, this.h);
-            /* sx, sy, sw, sh,
-            dx, dy, dw, dh); */
-        /* this._ctx.beginPath();
-        this._ctx.fillStyle = this.color;
-        this._ctx.fillRect(this.x, this.y, this.w, this.h); 
-        this._ctx.fill(); */
+    _draw() {   
+        if(this.movesToLeft) {
+            this._ctx.drawImage(
+                this._img, 
+                this._img.frameIndex * (this._img.width / this._img.frames), 
+                this._img.height / this._img.rows, 
+                this._img.width / this._img.frames, 
+                this._img.height / this._img.rows, 
+                this.x, 
+                this.y, 
+                this.w, 
+                this.h);
+        } else {
+            this._ctx.drawImage(
+                this._img, 
+                this._img.frameIndex * (this._img.width / this._img.frames), 
+                0, 
+                this._img.width / this._img.frames, 
+                this._img.height / this._img.rows, 
+                this.x, 
+                this.y, 
+                this.w, 
+                this.h);
+        }
+        
+        this._animation();
     }
+
+    _animation() {
+        this._img.frameIndex++;    
+        if (this._img.frameIndex >= this._img.frames) {
+            this._img.frameIndex = 0
+        }
+    };
 
     _changeDirection() {
-        const randomTime = Math.floor(Math.random() * 4000 + 4000);
+        const randomTime = Math.floor(Math.random() * 6000 + 4000);
         this.changeDirectionTimerId = setInterval(() => {
             this.vy *= -1;
         }, randomTime);
@@ -71,31 +90,6 @@ class Fish {
             this.vy *= -1;
         }
         
-    }
-
-
-
-    _setEatingTimer() {
-        this.eatingIntervalId =  setInterval(() => {
-            this.eatingTimer++;
-        }, 1000);    
-    }
-
-    _eating() {
-        this.energy = 100;
-        this.w *= 1.1;
-        this.h *= 1.1;
-    }
-
-    _checkIfGettingSmaller() {
-        if (this.eatingTimer % 20 === 0) {
-            this.energy -= 0.1;
-            this.w -= 0.01;
-            this.h -= 0.01;
-            /* if(this.w < 5 || this.h < 5) {
-                this.isDead = true;
-            } */
-        }
     }
 
 }

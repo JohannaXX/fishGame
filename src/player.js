@@ -1,4 +1,4 @@
-class Player extends Fish {
+class Player extends Enemy {
     constructor() {
         super(ctx);
         this._ctx = ctx;
@@ -6,15 +6,51 @@ class Player extends Fish {
 
         this._img = new Image;
         this._img.src = '../images/player.png';
+        this._img.frames = 6;
+        this._img.frameIndex = 0;
+        this._img.rows = 5;
+        this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
 
+        this.h = 150;
+        this.w = 200;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
 
-        this._setListeners()
+        this._setListeners();
+        this._openMouth();
+        this._closeMouth();
     }
 
-    _draw() {
-        this._ctx.drawImage(this._img, 0, this._img.height / 2, this._img.width / 6, this._img.height / 2, this.x, this.y, this.w, this.h);
+    _animation() {
+        this._img.frameIndex++;
+        if (this._img.frameIndex > 6) {
+            this._img.frameIndex = 5;
+        }
+      
+        if (this._img.frameIndex >= this._img.frames) {
+        this._img.frameIndex = 0
+        }
+    };
+
+    _openMouth() {
+        console.log('ok')
+        if (this.movesToLeft) {
+            this._img.frameIndex = 0; 
+            this._img.rowCutIndex = 1;
+        } else {
+            this._img.frameIndex = 0; 
+            this._img.rowCutIndex = 3;
+        }
+        return true;
+    }
+
+    _closeMouth() {
+        if (this.movesToLeft) {
+            this._img.rowCutIndex = 0;
+        } else {
+            this._img.rowCutIndex = 2;
+        }
+        return true;
     }
 
     _setListeners() {
@@ -22,7 +58,7 @@ class Player extends Fish {
         const DOWN = 40;
         const RIGHT = 39;
         const LEFT = 37;
-        //const SPACE = 32;
+        const SPACE = 32;
 
         document.addEventListener('keydown', e => {
             switch (e.keyCode) {
@@ -42,9 +78,9 @@ class Player extends Fish {
                     this.x -= 5
                     this.vx -= 0.1;
                     break
-                /* case SPACE:
-                    this.eat()
-                    break; */
+                case SPACE:
+                    this._openMouth()
+                    break;
           }
         })
     
@@ -66,9 +102,9 @@ class Player extends Fish {
                     this.x -= 0
                     this.vx = -0.1;
                     break
-                /* case SPACE:
-                    this.notEating()
-                    break; */
+                case SPACE:
+                    this._closeMouth();
+                    break;
           }
         })
     }

@@ -9,10 +9,12 @@ class Game {
         this.player = new Player();
         this.allEnemies = [];
         this.allFish = [];
+        this.allJellyfish = [];
         this.orca = new Orca(ctx);
     }
     start() {
-        for (let i = 0; i< 4; i++) this.allFish.push(new Fish(ctx));
+        for (let i = 0; i< 14; i++) this.allFish.push(new Fish(ctx));
+        for (let i = 0; i< 4; i++) this.allJellyfish.push(new Jellyfish(ctx));
         for (let i = 0; i< 2; i++) this.allEnemies.push(new Enemy(ctx));
 
         this.intervalId =  setInterval(() => {
@@ -23,7 +25,7 @@ class Game {
             this._checkForCollision();
             if (this.intervalCounter % 150 === 0) {
                 this.allFish.push(new Fish(ctx));
-                
+                this.allJellyfish.push(new Jellyfish(ctx));
             }
             if (this.intervalCounter % 500 === 0) {
                 this.allEnemies.push(new Enemy(ctx))
@@ -39,7 +41,7 @@ class Game {
             }
             this.intervalCounter++;
             this.player._checkEnergyLevel();
-          }, 1000 / 60);    
+          }, 1000 / 10);    
     }
 
     _clear() {
@@ -77,15 +79,17 @@ class Game {
         this.background._draw();
         this.orca._draw();
         this.fishfood.forEach( food => food._draw());
-        this.allEnemies.forEach( enemy => enemy._draw())
+        this.allJellyfish.forEach( jf => jf._draw());
         this.allFish.forEach( fish => fish._draw());
         this.player._draw();
+        this.allEnemies.forEach( enemy => enemy._draw());
     }
 
     _move() {
         this.background._move();
         this.orca._move();
         this.fishfood.forEach( food => food._move());
+        this.allJellyfish.forEach( jf => jf._move());
         this.allEnemies.forEach( enemy => enemy._move())
         this.allFish.forEach( fish => fish._move());
         this.player._move()
@@ -98,7 +102,7 @@ class Game {
 
     _checkIfGettingSmaller() {
         this.player._checkIfGettingSmaller();
-        this.allFish.forEach( fish => fish._checkIfGettingSmaller());
+        this.allEnemies.forEach( enemy => enemy._checkIfGettingSmaller());
         this._checkIfDead();
     }
 
