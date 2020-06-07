@@ -10,7 +10,9 @@ class Game {
         this.allEnemies = [];
         this.allFish = [];
         this.allJellyfish = [];
-        this.shark = new Shark(ctx);
+
+        const randomY = Math.floor(Math.random() * (this._ctx.canvas.height - 200));
+        this.shark = new Shark(ctx, randomY);
     }
     start() {
         for (let i = 0; i< 10; i++) this.allFish.push(new Fish(ctx));
@@ -82,7 +84,6 @@ class Game {
         this.player._draw();
         this.allEnemies.forEach( enemy => enemy._draw());
         this.shark._draw();
-        this.shark.entranceAlert;
     }
 
     _move() {

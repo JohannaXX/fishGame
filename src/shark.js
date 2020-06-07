@@ -1,13 +1,16 @@
 class Shark extends Enemy {
-    constructor() {
+    constructor(ctx, randomY) {
         super(ctx);
         this._ctx = ctx;
+        this.alterTimerCounter = 0;
+        this.alertTimer = setInterval(() => {
+            this.alterTimerCounter++;
+        }, 1000);;
 
-        this.w = 300;
-        this.x = 0;
         this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 200));
+        this.w = 300;
         this.h = 150;
-        this.vx = 10;
+        this.vx = 30;
         this.vy = 0;
 
         this._img = new Image;
@@ -16,15 +19,25 @@ class Shark extends Enemy {
         this._img.rows = 4;
         this._img.frameIndex = 0;
         this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
-
-       // this.entranceAlert = new EntranceAlert(this._ctx, this.movesToLeft, this.y)
-        this.entranceAlert = this._giveAlert();
         this._start();
     }
 
+    _start() {
+        if (this.movesToLeft) {
+            this.x = this._ctx.canvas.width + 200;
+            this.vx *= (-1);
+            this.vy *= (-1);
+        } else {
+            this.x = 0 - (this.w + 200);
+        }
+    }
 
     _draw() {   
         if(this.movesToLeft) {
+            if(this.alterTimerCounter < 3) {
+                this._ctx.fillStyle = 'red';
+                this._ctx.fillRect((this._ctx.canvas.width-30), this.y, 30, 150);
+            }
             this._ctx.drawImage(
                 this._img, 
                 this._img.frameIndex * (this._img.width / this._img.frames), 
@@ -34,8 +47,13 @@ class Shark extends Enemy {
                 this.x, 
                 this.y, 
                 this.w, 
-                this.h);
+                this.h
+            );
         } else {
+            if(this.alterTimerCounter < 3) {
+                this._ctx.fillStyle = 'red';
+                this._ctx.fillRect(0, this.y, 30, 150);
+            }
             this._ctx.drawImage(
                 this._img, 
                 this._img.frameIndex * (this._img.width / this._img.frames), 
@@ -45,7 +63,8 @@ class Shark extends Enemy {
                 this.x, 
                 this.y, 
                 this.w, 
-                this.h);
+                this.h
+            );
         }
         this._animation();
     }
@@ -55,12 +74,6 @@ class Shark extends Enemy {
         this.changeDirectionX = setInterval(() => {
             this.vy *= -1;
         }, randomTime1);
-    }
-
-    _giveAlert() {
-        this._ctx.beginPath();
-        this._ctx.fillStyle = 'red';
-        this._ctx.fillRect(this.x, this.y, 20, this.h);
     }
 
     _eating() {
