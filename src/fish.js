@@ -70,7 +70,7 @@ class Fish {
 
     _changeDirection() {
         const randomTime1 = Math.floor(Math.random() * 6000 + 4000);
-        const randomTime2 = Math.floor(Math.random() * 5000 + 60);
+        const randomTime2 = Math.floor(Math.random() * 20000 + 7000);
         this.changeDirectionX = setInterval(() => {
             this.vy *= -1;
         }, randomTime1);

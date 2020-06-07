@@ -77,7 +77,6 @@ class Game {
     
     _draw() {
         this.background._draw();
-
         this.fishfood.forEach( food => food._draw());
         this.allJellyfish.forEach( jf => jf._draw());
         this.allFish.forEach( fish => fish._draw());
@@ -158,8 +157,8 @@ class Game {
         });
 
         this.allFish.forEach( fish => {
-            const collXWithPlayer = fish.x +10 < (this.player.x + (this.player.w * 0.8)) && fish.x + (fish.w *0.8) > this.player.x +10;
-            const collYWithPlayer = fish.y + (fish.h * 0.8) > this.player.y +10 && fish.y +10 < this.player.y + (this.player.h *0.8);
+            const collXWithPlayer = fish.x +10 < (this.player.x + (this.player.w -10)) && fish.x + (fish.w -10) > this.player.x +10;
+            const collYWithPlayer = fish.y + (fish.h -10) > this.player.y +10 && fish.y +10 < this.player.y + (this.player.h -10);
             if(collXWithPlayer && collYWithPlayer) {
                 if ((this.player.x + this.player.w) < (fish.x + fish.w/2) && this.player.movesToLeft === false) {
                     this.player._eating();
@@ -175,11 +174,11 @@ class Game {
         this.allJellyfish.forEach( jellyfish => {
             const collXWithPlayer = jellyfish.x +10 < (this.player.x + (this.player.w * 0.8)) && jellyfish.x + (jellyfish.w *0.8) > this.player.x +10;
             const collYWithPlayer = jellyfish.y + (jellyfish.h * 0.8) > this.player.y +10 && jellyfish.y +10 < this.player.y + (this.player.h *0.8);
-            if(collXWithPlayer && collYWithPlayer && !this.player.hitted) {
+            if(collXWithPlayer && collYWithPlayer && !this.player.hitByJellyFish) {
                 this.player.hitByJellyFish = true;
                 this.player._updateStrength('subtract');
-                this.player.w *= 0.95;
-                this.player.h *= 0.95;
+                this.player.w *= 0.90;
+                this.player.h *= 0.90;
                 this.player._resetHitByJellyfish();
             }
         });

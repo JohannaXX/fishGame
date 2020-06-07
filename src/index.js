@@ -2,4 +2,11 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const game = new Game(ctx);
-game.start();
+
+const welcomingPage = document.getElementById('welcoming-page');
+
+const startBtn = document.getElementById('start-btn');
+startBtn.onclick = () => {
+    game.start(); 
+    document.getElementById('welcoming-page').style.display = 'none'
+}

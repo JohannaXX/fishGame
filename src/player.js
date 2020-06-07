@@ -13,17 +13,19 @@ class Player extends Enemy {
         this._img.frameIndex = 0;
         this._img.rows = 5;
         this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
-        this.h = 70;
         this.w = 100;
+        this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
 
         this._setListeners();
-        this._setEatingTimer();
+        this._setEatingTimer();    
         this._updateStrength();
         this._openMouth();
         this._closeMouth();
     }
+
+    _changeDirection() {/* overwriting parent class method */};
 
     _setEatingTimer() {
         this.eatingIntervalId =  setInterval(() => {
@@ -74,8 +76,11 @@ class Player extends Enemy {
             }, 400);
         } 
         this.energy = 100;
-        this.w *= 1.2;
-        this.h *= 1.2;
+        if (this.w <= 250) {
+            this.w *= 1.2;
+            this.h *= 1.2;
+        }
+       
     }
 
     _openMouth() {
@@ -118,10 +123,12 @@ class Player extends Enemy {
                 case RIGHT:
                     this.x += 5
                     this.vx += 1;
+                    if(this.movesToLeft === true) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
                     break
                 case LEFT:
                     this.x -= 5
                     this.vx -= 1;
+                    if(this.movesToLeft === false) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
                     break
                 case SPACE:
                     this._openMouth()
