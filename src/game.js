@@ -4,17 +4,21 @@ class Game {
         this.intervalId;
         this.intervalCounter = 0;
 
+        //this.audio = new Audio ('../audios/waterBackground.mp3');
+        this.audio = new Audio ('../audios/inTheWater.mp3');
+        this.audio.loop = true;
+        this.audioGameOver = new Audio ('../audios/gameOver.mp3');
+        this.audioYouWon = new Audio ('../audios/youWon.mp3');
         this.background = new Background(ctx);
         this.fishfood = [];
         this.player = new Player();
         this.allEnemies = [];
         this.allFish = [];
         this.allJellyfish = [];
-
-        const randomY = Math.floor(Math.random() * (this._ctx.canvas.height - 200));
-        this.shark = new Shark(ctx, randomY);
+        this.shark = new Shark(ctx);
     }
     start() {
+        this.audio.play();
         for (let i = 0; i< 10; i++) this.allFish.push(new Fish(ctx));
         for (let i = 0; i< 2; i++) this.allEnemies.push(new Enemy(ctx));
         this.allJellyfish.push(new Jellyfish(ctx));
@@ -39,7 +43,7 @@ class Game {
             if (this.intervalCounter % 2000 === 0 && this.intervalCounter !== 0) {
                 this._clearAllOutOfSight();
             }
-            if (this.intervalCounter % 5000 === 0) {
+            if (this.intervalCounter % 3000 === 0) {
                 this.shark = new Shark(ctx);
             }
             this.intervalCounter++;
@@ -233,7 +237,13 @@ class Game {
         }
     }
 
+    _youWon() {
+        this.audioYouWon.play();
+    }
+
     _gameOver() {
+        this.audio.loop = false;
+        this.audioGameOver.play();
         setTimeout(() => {
             clearInterval(this.intervalId);
             this._ctx.fillStyle = 'white';

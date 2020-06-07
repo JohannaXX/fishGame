@@ -6,6 +6,9 @@ class Player extends Enemy {
         this.strength = 50;
         this.isDead = false;
         this.hitByJellyFish = false;
+        this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
+        this.audioEatFish = new Audio('../audios/eatingFish.mp3');
+        this.audioOpenMouth = new Audio('../audios/openMouth.mp3');
 
         this._img = new Image;
         this._img.src = '../images/playerRed.png';
@@ -17,6 +20,9 @@ class Player extends Enemy {
         this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
+        this.ax = 2;
+        this.ay = 2;
+        this.drift = -1;
 
         this._setListeners();
         this._setEatingTimer();    
@@ -31,6 +37,11 @@ class Player extends Enemy {
         this.eatingIntervalId =  setInterval(() => {
             this.eatingTimer++;
         }, 1000);    
+    }
+
+    _move() {
+        this.x += this.vx;
+        this.y += this.vy;
     }
 
     _resetHitByJellyfish(){
@@ -62,6 +73,7 @@ class Player extends Enemy {
     }
 
     _eating() {
+        this.audioEatFish.play();
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -84,6 +96,7 @@ class Player extends Enemy {
     }
 
     _openMouth() {
+        this.audioOpenMouth.play();
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -115,6 +128,7 @@ class Player extends Enemy {
                 case UP:
                     this.y -= 5;
                     this.vy -= 1;
+
                     break
                 case DOWN:
                     this.y += 5;
@@ -177,6 +191,7 @@ class Player extends Enemy {
                 break;
             case 'subtract':
                 this.strength -= 0.1;
+                this.audioReduceSize.play();
                 break;
         }
         strengthArea.style.height = (`${100-this.strength}%`);

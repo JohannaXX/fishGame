@@ -5,7 +5,7 @@ class Shark extends Enemy {
         this.alterTimerCounter = 0;
         this.alertTimer = setInterval(() => {
             this.alterTimerCounter++;
-        }, 1000);;
+        }, 500);;
 
         this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 200));
         this.w = 300;
@@ -24,11 +24,11 @@ class Shark extends Enemy {
 
     _start() {
         if (this.movesToLeft) {
-            this.x = this._ctx.canvas.width + 200;
+            this.x = this._ctx.canvas.width + 300;
             this.vx *= (-1);
             this.vy *= (-1);
         } else {
-            this.x = 0 - (this.w + 200);
+            this.x = 0 - (this.w + 300);
         }
     }
 
