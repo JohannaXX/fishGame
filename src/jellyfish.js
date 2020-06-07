@@ -55,5 +55,12 @@ class Jellyfish extends Fish {
           }
     };
 
+    _changeDirection() {
+        const randomTime1 = Math.floor(Math.random() * 6000 + 4000);
+        this.changeDirectionX = setInterval(() => {
+            this.vy *= -1;
+        }, randomTime1);
+    }
+
 
 }

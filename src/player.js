@@ -4,24 +4,37 @@ class Player extends Enemy {
         this._ctx = ctx;
         this.energy = 100;
         this.strength = 50;
+        this.isDead = false;
+        this.hitByJellyFish = false;
 
         this._img = new Image;
-        this._img.src = '../images/player.png';
-        this._img.style.border = '2px solid red';
+        this._img.src = '../images/playerRed.png';
         this._img.frames = 6;
         this._img.frameIndex = 0;
         this._img.rows = 5;
         this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
-
-        this.h = 150;
-        this.w = 200;
+        this.h = 70;
+        this.w = 100;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
 
         this._setListeners();
+        this._setEatingTimer();
+        this._updateStrength();
         this._openMouth();
         this._closeMouth();
-        this._updateStrength();
+    }
+
+    _setEatingTimer() {
+        this.eatingIntervalId =  setInterval(() => {
+            this.eatingTimer++;
+        }, 1000);    
+    }
+
+    _resetHitByJellyfish(){
+        setTimeout(() => {
+            this.hitByJellyFish = false;
+        }, 2000)
     }
 
     _animation() {
@@ -34,6 +47,17 @@ class Player extends Enemy {
         this._img.frameIndex = 0
         }
     };
+
+    _checkIfGettingSmaller() {
+        if (this.eatingTimer % 20 === 0) {
+            this.energy -= 0.1;
+            this.w -= 0.01;
+            this.h -= 0.01;
+        }
+        if(this.w < 50) {
+            this.isDead = true;
+        }
+    }
 
     _eating() {
         if (this.movesToLeft) {
@@ -50,8 +74,8 @@ class Player extends Enemy {
             }, 400);
         } 
         this.energy = 100;
-        this.w *= 1.1;
-        this.h *= 1.1;
+        this.w *= 1.2;
+        this.h *= 1.2;
     }
 
     _openMouth() {
