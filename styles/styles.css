@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fontdiner+Swanky&family=Irish+Grover&family=Lakki+Reddy&family=Molle:ital@1&family=Monoton&family=Ribeye&display=swap');
+
 html, body {
     margin: 0;
     padding: 0;
@@ -6,9 +8,11 @@ html, body {
 }
 
 body {
+    display: flex;
+    justify-content: center;
     width: 100vw;
     text-align: center;
-    background-color: #FFF3CA;
+    background-image: linear-gradient(to right, #003C5F, rgb(0, 33, 53),  #003C5F );
 }
 
 .container {
@@ -20,66 +24,161 @@ body {
 }
 
 header {
-    color: #003C5F;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    width: 100vw;
+    color: #c1ebfc;
+    font-size: 1.5rem;
+    font-family: 'Irish Grover';
 }
-#welcoming-page {
-    display: block;
+
+header > h1 {
     position: absolute;
-    background-color: #FFF3CA;
+    left: 2rem;
+    top: 1rem;
+    margin: 0;
+    text-shadow: 0 0 2px rgb(0, 33, 53);
+    z-index: 1;
+}
+
+#level {
+    visibility: hidden;
+    display: flex;
+    flex-direction: row;
+    max-width: 10rem;
+    padding: 10px;
+    margin: 1rem auto;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px #c1ebfc;
+    background-color: #c1ebfc;
+    color: rgb(0, 33, 53);
+    font-size: 1.5rem;
+    font-family: 'Arial';
+}
+
+@media screen and (max-width: 1500px) {
+    #level {
+        position: absolute;
+        top: 1rem;
+        border: 1px solid rgb(0, 33, 53);
+    }
+  }
+
+#level-number {
+    margin-left: 10px;
+}
+
+#button-area {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+#play-again-btn,
+#continue-btn {
+    display: none;
+    position: absolute;
+    justify-content: center;
+    top: 520px;
+    width: 12rem;
+    height: 4rem;
+    font-size: 2rem;
+    background-color: #aae7ff;
+}
+
+button {
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    margin: auto;
+    border: 2px solid rgb(0, 33, 53);
+    border-radius: 5px;
+    background-color: #c1ebfc;
+    color: rgb(0, 33, 53);
+}
+
+#welcoming-page {
+    position: absolute;
     width: 100vw;
     height: 100vh;
+    left: 0;
+    justify-content: center;
+    padding-top: 5rem;
+    background-image: linear-gradient(to right, #003C5F, rgb(0, 33, 53),  #003C5F );
+    font-size: 1.5rem;
+    color: #c1ebfc;
+}
+
+#start-btn {
+    margin-top: 20px;
+    font-size: 1rem;
 }
 
 main {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    width: 100vw;
     justify-content: center;
+    width: 100vw;
+}
+
+.vertical-text {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    color: #c1ebfc;
+}
+
+#energy-text,
+#strength-text {
+    font-size: 2rem;
+    transform: rotate(-90deg);
 }
 
 #energy-area {
     display: flex;
     align-items: flex-start;
-    width: 2rem;
-    margin-right: 2rem;
-    margin-bottom: 20px;
-   /*  border: 2px solid #003C5F; */
+    width: 1rem;
+    margin: 1rem 2rem 20px 0;
     border-radius: 1rem;
     background-image: linear-gradient(green 50%, red);
-    /* box-shadow: 10px 10px 8px #888888; */
-
+    box-shadow: 0px 4px 8px #c1ebfc;
+    border: 1px solid #c1ebfc;
 }
 
 #progress-bar {
     width: 2rem;
     height: 100%;
-    background-color: #FFF3CA;
-    /* background-image: linear-gradient(green, red 30%); */
-    /* background-image: linear-gradient( #FFF3CA 90%, transparent);  */
+    background-color: rgb(0, 33, 53);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
 }
 
 #canvas {
-    /* background-image: linear-gradient(#AADBF7, #3A89B7 25%, #003C5F, #FFF3CA); */
-    background-image: linear-gradient(#c1ebfc, #37acdc);
-    /* background-color: #37acdc; */
-    box-shadow: 10px 10px 8px #888888;
+    margin-top:1rem;
     margin-bottom: 20px;
-    border: 5px solid transparent;
+    background-image: linear-gradient(#c1ebfc, #37acdc);
+    box-shadow: 0px 4px 8px #c1ebfc;
+    border: 5px solid transparent; 
 }
 
 #strength-area {
     display: flex;
     align-items: flex-start;
-    margin-left: 2rem;
-    width: 2rem;
+    width: 1rem;
+    margin: 1rem 0 20px 2rem;
+    border: 1px solid #c1ebfc;
     border-radius: 1rem;
-    margin-bottom: 20px;
-    background-image: linear-gradient(yellow 20%, #003C5F 60%);
+    background-image: linear-gradient(yellow 50%, red);
+    box-shadow: 0px 4px 8px #c1ebfc;
 }
 
 #strength {
     width: 2rem;
     height: 50%;
-    background-color: #FFF3CA;
+    background-color: rgb(0, 33, 53);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
 }

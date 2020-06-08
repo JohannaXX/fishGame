@@ -1,7 +1,9 @@
 class Shark extends Enemy {
-    constructor(ctx, randomY) {
+    constructor(ctx, level) {
         super(ctx);
         this._ctx = ctx;
+        this.level = level;
+        console.log(level);
         this.alterTimerCounter = 0;
         this.alertTimer = setInterval(() => {
             this.alterTimerCounter++;

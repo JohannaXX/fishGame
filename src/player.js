@@ -4,11 +4,13 @@ class Player extends Enemy {
         this._ctx = ctx;
         this.energy = 100;
         this.strength = 50;
+        this.eatingIntervalId;
+        this.eatingTimer = 0;
         this.isDead = false;
         this.hitByJellyFish = false;
-        this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
+        /* this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
         this.audioEatFish = new Audio('../audios/eatingFish.mp3');
-        this.audioOpenMouth = new Audio('../audios/openMouth.mp3');
+        this.audioOpenMouth = new Audio('../audios/openMouth.mp3'); */
 
         this._img = new Image;
         this._img.src = '../images/playerRed.png';
@@ -16,7 +18,7 @@ class Player extends Enemy {
         this._img.frameIndex = 0;
         this._img.rows = 5;
         this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
-        this.w = 100;
+        this.w = 50;
         this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
@@ -36,7 +38,7 @@ class Player extends Enemy {
     _setEatingTimer() {
         this.eatingIntervalId =  setInterval(() => {
             this.eatingTimer++;
-        }, 1000);    
+        }, 100000);    
     }
 
     _move() {
@@ -62,18 +64,18 @@ class Player extends Enemy {
     };
 
     _checkIfGettingSmaller() {
-        if (this.eatingTimer % 20 === 0) {
-            this.energy -= 0.1;
+        if (this.eatingTimer % 20000 === 0) {
+            this.energy -= 0.05;
             this.w -= 0.01;
             this.h -= 0.01;
         }
-        if(this.w < 50) {
+        if(this.w < 20) {
             this.isDead = true;
         }
     }
 
     _eating() {
-        this.audioEatFish.play();
+       /*  this.audioEatFish.play(); */
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -96,7 +98,7 @@ class Player extends Enemy {
     }
 
     _openMouth() {
-        this.audioOpenMouth.play();
+        /* this.audioOpenMouth.play(); */
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -177,8 +179,6 @@ class Player extends Enemy {
 
     _checkEnergyLevel() {
         const progressBar = document.getElementById('progress-bar');
-       /*  background-image: linear-gradient( #FFF3CA , transparent);  */
-       /*  progressBar.style.backgroundImage = (`#FFF3CA ${this.energy}%, transparent`); */
         progressBar.style.height = (`${100-this.energy}%`);
         if (this.energy <= 0) this.isDead = true;
     }
@@ -191,7 +191,7 @@ class Player extends Enemy {
                 break;
             case 'subtract':
                 this.strength -= 0.1;
-                this.audioReduceSize.play();
+                /* this.audioReduceSize.play(); */
                 break;
         }
         strengthArea.style.height = (`${100-this.strength}%`);

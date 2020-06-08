@@ -1,8 +1,6 @@
 class Enemy {
     constructor(ctx) {
         this._ctx = ctx;
-        this.eatingIntervalId;
-        this.eatingTimer = 0;
         this.movesToLeft = (Math.random() < 0.5) ? false : true ;
 
         this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 10) + 10 );
@@ -82,13 +80,16 @@ class Enemy {
                 this._img.rowCutIndex = 2;
             }, 400);
         }
-        this.w *= 1.2;
-        this.h *= 1.2;
+
+        if(this.w <= 250) {
+            this.w *= 1.2;
+            this.h *= 1.2;
+        }
     }
 
     _changeDirection() {
-        const randomTime1 = Math.floor(Math.random() * 6000 + 4000);
-        const randomTime2 = Math.floor(Math.random() * 5000 + 60);
+        const randomTime1 = Math.floor(Math.random() * 12000 + 6000);
+        const randomTime2 = Math.floor(Math.random() * 20000 + 7000);
         this.changeDirectionX = setInterval(() => {
             this.vy *= -1;
         }, randomTime1);
