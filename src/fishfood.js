@@ -2,10 +2,10 @@ class Fishfood {
     constructor(ctx) {
         this._ctx = ctx;
 
-        this.x = Math.random() * (this._ctx.canvas.width - 20);
+        this.x = Math.floor(Math.random() * (this._ctx.canvas.width - 20)) + 20;
         this.y = 0;
-        this.r = Math.ceil(Math.random() * 4 + 0.5);
-        this.vy = Math.ceil(Math.random() * 9) / 3;
+        this.r = Math.ceil(Math.random() * 3 + 2);
+        this.vy = Math.ceil(Math.random() * 9) +2;
         this.color = Math.random() < 0.5 ? 'yellow' : 'red';
     }
 

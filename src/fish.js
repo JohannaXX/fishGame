@@ -1,5 +1,5 @@
 class Fish {
-    constructor(ctx) {
+    constructor(ctx, level) {
         this._ctx = ctx;
         this.movesToLeft = (Math.random() < 0.5) ? false : true ;
 
@@ -11,10 +11,10 @@ class Fish {
         this._img.frameIndex = 0;
         this._img.imageRowCut;
 
-        this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 10) + 10 );
+        this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 50) + 10 );
         this.w = Math.floor(Math.random() * 50 + 30);
         this.h = this.w / 1.1;
-        this.vx = (Math.random() * 5) + 1 ;
+        this.vx = (Math.random() * 5) + Math.ceil(level/2) ;
         this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
         
         this._start();
@@ -32,7 +32,6 @@ class Fish {
     }
 
     _draw() {   
-       // if(this.movesToLeft) {
         if(this.movesToLeft) {
             this._ctx.drawImage(
                 this._img, 

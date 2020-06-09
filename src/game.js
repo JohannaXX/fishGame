@@ -4,6 +4,7 @@ class Game {
         this.intervalId;
         this.intervalCounter = 0;
         this.level = 1;
+        this.roundWon = false;
 
         /* this.audio = new Audio ('../audios/inTheWater.mp3');
         this.audio.loop = true;
@@ -20,11 +21,15 @@ class Game {
     }
 
     start() {
+        const getLevel = localStorage.getItem('sharkGameLevel');
+        if (+getLevel > this.level)  this.level = getLevel;
+
+
         const showLevel = document.getElementById('level-number');
         showLevel.innerHTML = this.level;
 
         /* this.audio.play(); */
-        for (let i = 0; i< (1*this.level); i++) this.allFish.push(new Fish(ctx));
+        for (let i = 0; i< (1*this.level); i++) this.allFish.push(new Fish(ctx, this.level));
         for (let i = 0; i< (1*this.level); i++) this.allEnemies.push(new Enemy(ctx));
         this.allJellyfish.push(new Jellyfish(ctx));
 
@@ -36,20 +41,20 @@ class Game {
             this._checkIfReadyToFightBigFish();
             this.player._checkIfGettingSmaller();
             this._checkIfDead();
-            if (this.intervalCounter % 150 === 0) {
-                this.allFish.push(new Fish(ctx));
+            if (this.intervalCounter % 100 === 0) {
+                this.allFish.push(new Fish(ctx, this.level));
                 this.allJellyfish.push(new Jellyfish(ctx));
             }
-            if (this.intervalCounter % (500 / Math.ceil(this.level / 2)) === 0) {
+            if (this.intervalCounter % (400 / Math.ceil(this.level / 2)) === 0) {
                 this.allEnemies.push(new Enemy(ctx))
             }
-            if (this.intervalCounter % (1200 / Math.ceil(this.level / 2)) === 0 && this.intervalCounter !== 0) {
+            if (this.intervalCounter % (300 / Math.ceil(this.level / 2)) === 0 /* && this.intervalCounter !== 0 */) {
                this._generateFood();
             }
-            if (this.intervalCounter % (2000 / Math.ceil(this.level / 2)) === 0 && this.intervalCounter !== 0) {
+            if (this.intervalCounter % 500 === 0 && this.intervalCounter !== 0) {
                 this._clearAllOutOfSight();
             }
-            if (this.intervalCounter % (5000 / Math.ceil(this.level / 2)) === 0 && this.intervalCounter !== 0) {
+            if (this.intervalCounter % (500 / Math.ceil(this.level / 2)) === 0 && this.intervalCounter !== 0) {
                 this.shark.push(new Shark(this._ctx, this.level));
             }
             this.intervalCounter++;
@@ -102,11 +107,11 @@ class Game {
         this.allFish.forEach( fish => fish._move());
         this.player._move()
         this.allJellyfish.forEach( jf => jf._move());
-        this.allEnemies.forEach( enemy => enemy._move())
+        this.allEnemies.forEach( enemy => enemy._move());
     }
 
     _generateFood() {
-        const amount = Math.floor(Math.random() * 3 + 2);
+        const amount = Math.floor(Math.random() * 3 + 2) + this.level;
         for (let i = 0; i<= amount; i++) this.fishfood.push(new Fishfood(ctx));
     }
 
@@ -121,34 +126,38 @@ class Game {
         this._hitCanvasBorder();
         this._checkForFoodCollision();
 
-        const collXWithPlayer = this.shark.x +10 < this.player.x + this.player.w && this.shark.x + this.shark.w > this.player.x ;
-        const collYWithPlayer = this.shark.y + (this.shark.h * 0.8) > this.player.y +10 && this.shark.y + (this.shark.h/ 2) < this.player.y + (this.player.h *0.8);
-        if(collXWithPlayer && collYWithPlayer) {
-            if ((this.shark.x + this.shark.w) < (this.player.x + this.player.w/2) && this.shark.movesToLeft === false) {
-                this.shark._eating();
-                this._gameOver();
+        this.shark.forEach( sh => {
+            const collXWithPlayer = sh.x +10 < this.player.x + this.player.w && sh.x + sh.w > this.player.x ;
+            const collYWithPlayer = sh.y + (sh.h * 0.85) > this.player.y +10 && sh.y + (sh.h/ 2) < this.player.y + (this.player.h *0.85);
+            if(collXWithPlayer && collYWithPlayer) {
+                if ((sh.x + sh.w) < (this.player.x + this.player.w/2) && sh.movesToLeft === false) {
+                    sh._eating();
+                    this._gameOver();
+                }
+                if (sh.x > (this.player.x + this.player.w/2) && sh.movesToLeft) {
+                    sh._eating();
+                    this._gameOver();
+                } 
             }
-            if (this.shark.x > (this.player.x + this.player.w/2) && this.shark.movesToLeft) {
-                this.shark._eating();
-                this._gameOver();
-            } 
-        }
+        });
 
         this.allEnemies.forEach( enemy => {
-            const collXWithPlayer = enemy.x +10 < (this.player.x + (this.player.w * 0.8)) && enemy.x + (enemy.w *0.8) > this.player.x +10;
-            const collYWithPlayer = enemy.y + (enemy.h * 0.8) > this.player.y +10 && enemy.y +10 < this.player.y + (this.player.h *0.8);
+            const collXWithPlayer = enemy.x +5 < (this.player.x + (this.player.w * 0.9)) && enemy.x + (enemy.w *0.9) > this.player.x +5;
+            const collYWithPlayer = enemy.y + (enemy.h * 0.9) > this.player.y +5 && enemy.y +5 < this.player.y + (this.player.h *0.9);
             if(collXWithPlayer && collYWithPlayer) {
-                if ((enemy.x + enemy.w) < (this.player.x + this.player.w/2) && enemy.movesToLeft === false) {                  
+                if ((enemy.x + enemy.w) < (this.player.x + this.player.w/2) && enemy.movesToLeft === false) {    
+                    enemy._eating();              
                     this._gameOver();
                 }
                 if (enemy.x > (this.player.x + this.player.w/2) && enemy.movesToLeft) {
+                    enemy._eating();  
                     this._gameOver();
                 } 
             }
 
             this.allFish.forEach( fish => {
-                const collXWithEnemy = enemy.x +10 < (fish.x + (fish.w * 0.8)) && enemy.x + (enemy.w *0.8) > fish.x +10;
-                const collYWithEnemy = enemy.y + (enemy.h * 0.8) > fish.y +10 && enemy.y +10 < fish.y + (fish.h *0.8);
+                const collXWithEnemy = enemy.x +5 < (fish.x + (fish.w * 0.9)) && enemy.x + (enemy.w *0.9) > fish.x +5;
+                const collYWithEnemy = enemy.y + (enemy.h * 0.9) > fish.y +5 && enemy.y +5 < fish.y + (fish.h *0.9);
                 if(collXWithEnemy && collYWithEnemy && fish.x > 50 && fish.x < this._ctx.canvas.width - 50) {
                     if ((enemy.x + enemy.w) < (fish.x + fish.w/2) && enemy.movesToLeft === false) {
                         enemy._eating();
@@ -163,8 +172,8 @@ class Game {
         });
 
         this.allFish.forEach( fish => {
-            const collXWithPlayer = fish.x +10 < (this.player.x + (this.player.w -10)) && fish.x + (fish.w -10) > this.player.x +10;
-            const collYWithPlayer = fish.y + (fish.h -10) > this.player.y +10 && fish.y +10 < this.player.y + (this.player.h -10);
+            const collXWithPlayer = fish.x +5 < (this.player.x + (this.player.w -5)) && fish.x + (fish.w -5) > this.player.x +5;
+            const collYWithPlayer = fish.y + (fish.h -5) > this.player.y +5 && fish.y +5 < this.player.y + (this.player.h -5);
             if(collXWithPlayer && collYWithPlayer) {
                 if ((this.player.x + this.player.w) < (fish.x + fish.w/2) && this.player.movesToLeft === false) {
                     this.player._eating();
@@ -178,8 +187,8 @@ class Game {
         });
 
         this.allJellyfish.forEach( jellyfish => {
-            const collXWithPlayer = jellyfish.x +10 < (this.player.x + (this.player.w * 0.8)) && jellyfish.x + (jellyfish.w *0.8) > this.player.x +10;
-            const collYWithPlayer = jellyfish.y + (jellyfish.h * 0.8) > this.player.y +10 && jellyfish.y +10 < this.player.y + (this.player.h *0.8);
+            const collXWithPlayer = jellyfish.x +5 < (this.player.x + (this.player.w * 0.9)) && jellyfish.x + (jellyfish.w *0.9) > this.player.x +5;
+            const collYWithPlayer = jellyfish.y + (jellyfish.h * 0.9) > this.player.y +5 && jellyfish.y +5 < this.player.y + (this.player.h *0.9);
             if(collXWithPlayer && collYWithPlayer && !this.player.hitByJellyFish) {
                 this.player.hitByJellyFish = true;
                 this.player._updateStrength('subtract');
@@ -240,40 +249,40 @@ class Game {
     }
 
     _youWon() {
+        if(this.roundWon === false) {
+            this.roundWon = true;
+            localStorage.setItem('sharkGameLevel', +this.level +1);
+        }
        /*  this.audioYouWon.play(); */
-        this.level++;
-        /* const continueBtn = document.getElementById('continue-btn');
+        const continueBtn = document.getElementById('continue-btn');
         continueBtn.style.display = 'flex';
         continueBtn.onclick = () => {
-            this._clear;
-            this.start();
-            continueBtn.style.display = 'none';
-        } */
+            location.reload();
+        }
     }
 
     _gameOver() {
         /* this.audio.loop = false;
         this.audioGameOver.play(); */
         setTimeout(() => {
+            
             clearInterval(this.intervalId);
             this._ctx.fillStyle = 'white';
             this._ctx.textAlign = 'center';
             this._ctx.font = '6rem Arial';
             this._ctx.fillText('Game over!', this._ctx.canvas.width / 2 , this._ctx.canvas.height / 2);
 
-            /* const playAgainBtn = document.getElementById('play-again-btn');
+            const playAgainBtn = document.getElementById('play-again-btn');
             playAgainBtn.style.display = 'flex';
             playAgainBtn.onclick = () => {
-                this._clear;
-                this.start();
-                playAgainBtn.style.display = 'none';
-            } */
+                location.reload();
+            }
 
-            console.log(this.allEnemies);
+            /* console.log(this.allEnemies);
             console.log(this.fishfood);
             console.log(this.allFish);
             console.log(this.fishfood);
-            console.log(this.shark);
+            console.log(this.shark); */
         }, 500);
         
     }

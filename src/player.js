@@ -3,9 +3,8 @@ class Player extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.energy = 100;
-        this.strength = 50;
-        this.eatingIntervalId;
-        this.eatingTimer = 0;
+        this.strength = 20;
+        this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;
         /* this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
@@ -22,9 +21,6 @@ class Player extends Enemy {
         this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
-        this.ax = 2;
-        this.ay = 2;
-        this.drift = -1;
 
         this._setListeners();
         this._setEatingTimer();    
@@ -36,9 +32,13 @@ class Player extends Enemy {
     _changeDirection() {/* overwriting parent class method */};
 
     _setEatingTimer() {
-        this.eatingIntervalId =  setInterval(() => {
-            this.eatingTimer++;
-        }, 100000);    
+        if (this.eatingInterval) {
+            this.eatingInterval = false;
+            const countInterval = setInterval(() => {
+                this.eatingInterval = true;
+                this.energy -= 10
+            }, 1000);   
+        }
     }
 
     _move() {
@@ -64,10 +64,10 @@ class Player extends Enemy {
     };
 
     _checkIfGettingSmaller() {
-        if (this.eatingTimer % 20000 === 0) {
-            this.energy -= 0.05;
-            this.w -= 0.01;
-            this.h -= 0.01;
+        if (this.energy <= 0) {
+            this.energy = 100;
+            this.w *= 0.9;
+            this.h *= 0.9;
         }
         if(this.w < 20) {
             this.isDead = true;
@@ -128,23 +128,22 @@ class Player extends Enemy {
         document.addEventListener('keydown', e => {
             switch (e.keyCode) {
                 case UP:
-                    this.y -= 5;
-                    this.vy -= 1;
-
+                    this.y -= 4;
+                    this.vy -= 0.3;
                     break
                 case DOWN:
-                    this.y += 5;
-                    this.vy += 1;
+                    this.y += 4;
+                    this.vy += 0.3;
                     break
                 case RIGHT:
-                    this.x += 5
-                    this.vx += 1;
-                    if(this.movesToLeft === true) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
+                    this.x += 4;
+                    this.vx += 0.3;
+                    if(this.movesToLeft) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
                     break
                 case LEFT:
-                    this.x -= 5
-                    this.vx -= 1;
-                    if(this.movesToLeft === false) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
+                    this.x -= 4;
+                    this.vx -= 0.3;
+                    if(!this.movesToLeft) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
                     break
                 case SPACE:
                     this._openMouth()
@@ -156,19 +155,19 @@ class Player extends Enemy {
             switch (e.keyCode) {
                 case UP:
                     this.y += 0;
-                    this.vy = -0.1;
+                    //this.vy = -1;
                     break
                 case DOWN:
                     this.y += 0;
-                    this.vy = 0.1;
+                    //this.vy = 1;
                     break
                 case RIGHT:
                     this.x += 0
-                    this.vx = 0.1;
+                    //this.vx = 1;
                     break
                 case LEFT:
                     this.x -= 0
-                    this.vx = -0.1;
+                    //this.vx = -1;
                     break
                 case SPACE:
                     this._closeMouth();
@@ -180,7 +179,7 @@ class Player extends Enemy {
     _checkEnergyLevel() {
         const progressBar = document.getElementById('progress-bar');
         progressBar.style.height = (`${100-this.energy}%`);
-        if (this.energy <= 0) this.isDead = true;
+       // if (this.energy <= 0) this.isDead = true;
     }
 
     _updateStrength(update) {
@@ -190,7 +189,7 @@ class Player extends Enemy {
                 this.strength += 10;
                 break;
             case 'subtract':
-                this.strength -= 0.1;
+                this.strength -= 10;
                 /* this.audioReduceSize.play(); */
                 break;
         }
