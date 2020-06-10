@@ -3,7 +3,7 @@ class Player extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.energy = 100;
-        this.strength = 20;
+        this.strength = 40;
         this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;
@@ -12,7 +12,7 @@ class Player extends Enemy {
         this.audioOpenMouth = new Audio('../audios/openMouth.mp3'); */
 
         this._img = new Image;
-        this._img.src = '../images/playerRed.png';
+        this._img.src = '../images/player.png';
         this._img.frames = 6;
         this._img.frameIndex = 0;
         this._img.rows = 5;
@@ -21,21 +21,38 @@ class Player extends Enemy {
         this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
+        this.vx = 3;
+        this.vy = 0;
 
         this._setListeners();
         this._setEatingTimer();    
         this._updateStrength();
-        this._openMouth();
-        this._closeMouth();
     }
 
-    _changeDirection() {/* overwriting parent class method */};
+    _changeDirection(axis) {
+        switch(axis) {
+            case 'x':
+                this.vx *= (-1);
+                if (this.vx <= 0) {
+                    this.movesToLeft = true;
+                    this._img.rowCutIndex = 0;
+                } else {
+                    this.movesToLeft = false;
+                    this._img.rowCutIndex = 2;
+                }
+                break;
+            case 'y':
+                this.vy *= (-1);
+                break;
+        }
+    };
 
     _setEatingTimer() {
         if (this.eatingInterval) {
             this.eatingInterval = false;
             const countInterval = setInterval(() => {
                 this.eatingInterval = true;
+
                 this.energy -= 10
             }, 1000);   
         }
@@ -66,8 +83,8 @@ class Player extends Enemy {
     _checkIfGettingSmaller() {
         if (this.energy <= 0) {
             this.energy = 100;
-            this.w *= 0.9;
-            this.h *= 0.9;
+            this.w *= 0.95;
+            this.h *= 0.95;
         }
         if(this.w < 20) {
             this.isDead = true;
@@ -90,32 +107,14 @@ class Player extends Enemy {
             }, 400);
         } 
         this.energy = 100;
-        if (this.w <= 250) {
-            this.w *= 1.2;
-            this.h *= 1.2;
+        if (this.w <= 120) {
+            this.w *= 1.1;
+            this.h *= 1.1;
+        } else if (this.w >= 140) {
+            this.w = 140;
+            this.h = this.w * 0.7;
         }
        
-    }
-
-    _openMouth() {
-        /* this.audioOpenMouth.play(); */
-        if (this.movesToLeft) {
-            this._img.frameIndex = 0; 
-            this._img.rowCutIndex = 1;
-        } else {
-            this._img.frameIndex = 0; 
-            this._img.rowCutIndex = 3;
-        }
-        return true;
-    }
-
-    _closeMouth() {
-        if (this.movesToLeft) {
-            this._img.rowCutIndex = 0;
-        } else {
-            this._img.rowCutIndex = 2;
-        }
-        return true;
     }
 
     _setListeners() {
@@ -123,30 +122,26 @@ class Player extends Enemy {
         const DOWN = 40;
         const RIGHT = 39;
         const LEFT = 37;
-        const SPACE = 32;
 
         document.addEventListener('keydown', e => {
             switch (e.keyCode) {
                 case UP:
                     this.y -= 4;
                     this.vy -= 0.3;
-                    break
+                    break;
                 case DOWN:
                     this.y += 4;
                     this.vy += 0.3;
-                    break
+                    break;
                 case RIGHT:
                     this.x += 4;
                     this.vx += 0.3;
                     if(this.movesToLeft) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
-                    break
+                    break;
                 case LEFT:
                     this.x -= 4;
                     this.vx -= 0.3;
                     if(!this.movesToLeft) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
-                    break
-                case SPACE:
-                    this._openMouth()
                     break;
           }
         })
@@ -155,22 +150,19 @@ class Player extends Enemy {
             switch (e.keyCode) {
                 case UP:
                     this.y += 0;
-                    //this.vy = -1;
-                    break
+                    this.vy += 0.2;
+                    break;
                 case DOWN:
                     this.y += 0;
-                    //this.vy = 1;
-                    break
+                    this.vy -= 0.2;
+                    break;
                 case RIGHT:
                     this.x += 0
-                    //this.vx = 1;
-                    break
+                    this.vx -= 0.2;
+                    break;
                 case LEFT:
                     this.x -= 0
-                    //this.vx = -1;
-                    break
-                case SPACE:
-                    this._closeMouth();
+                    this.vx += 0.2;
                     break;
           }
         })
@@ -179,17 +171,19 @@ class Player extends Enemy {
     _checkEnergyLevel() {
         const progressBar = document.getElementById('progress-bar');
         progressBar.style.height = (`${100-this.energy}%`);
-       // if (this.energy <= 0) this.isDead = true;
     }
 
     _updateStrength(update) {
         const strengthArea = document.getElementById('strength');
         switch(update) {
             case 'add':
-                this.strength += 10;
+                this.strength += 20;
                 break;
             case 'subtract':
-                this.strength -= 10;
+                this.strength -= 20;
+                if (this.strength <= 0 ) {
+                    this.strength = 0;
+                }
                 /* this.audioReduceSize.play(); */
                 break;
         }

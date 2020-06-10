@@ -2,21 +2,21 @@ class Fish {
     constructor(ctx, level) {
         this._ctx = ctx;
         this.movesToLeft = (Math.random() < 0.5) ? false : true ;
+        
+        this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 50) + 10 );
+        this.w = Math.floor(Math.random() * 50 + 30);
+        this.h = this.w / 1.1;
+        this.vx = (Math.random() * 5) + Math.ceil(level/2) ;
+        this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
 
         this._img = new Image;
-        const getRandomImage = Math.ceil(Math.random() * 4);
+        const getRandomImage = Math.ceil(Math.random() * 5);
         this._img.src = `../images/fish${getRandomImage}.png`;
         this._img.frames = 6;
         this._img.rows = 2;
         this._img.frameIndex = 0;
         this._img.imageRowCut;
 
-        this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 50) + 10 );
-        this.w = Math.floor(Math.random() * 50 + 30);
-        this.h = this.w / 1.1;
-        this.vx = (Math.random() * 5) + Math.ceil(level/2) ;
-        this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
-        
         this._start();
         this._changeDirection();
     }
@@ -43,7 +43,6 @@ class Fish {
                 this.y, 
                 this.w, 
                 this.h);
-           // this._ctx.strokeRect(this.x, this.y, this.w, this.h)
         } else {
             this._ctx.drawImage(
                 this._img, 
@@ -55,7 +54,6 @@ class Fish {
                 this.y, 
                 this.w, 
                 this.h);
-           // this._ctx.strokeRect(this.x, this.y, this.w, this.h)
         }
         this._animation();
     }

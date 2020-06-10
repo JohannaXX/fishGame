@@ -38,11 +38,13 @@ class Game {
             this._draw();
             this._move();
             this._checkForCollision();
-            this._checkIfReadyToFightBigFish();
+            this._checkIfReadyToFightShark();
             this.player._checkIfGettingSmaller();
             this._checkIfDead();
-            if (this.intervalCounter % 100 === 0) {
+            if (this.intervalCounter % 50 === 0) {
                 this.allFish.push(new Fish(ctx, this.level));
+            }
+            if (this.intervalCounter % 100 === 0) {
                 this.allJellyfish.push(new Jellyfish(ctx));
             }
             if (this.intervalCounter % (400 / Math.ceil(this.level / 2)) === 0) {
@@ -92,10 +94,10 @@ class Game {
     
     _draw() {
         this.background._draw();
-        this.fishfood.forEach( food => food._draw());
-        this.allJellyfish.forEach( jf => jf._draw());
         this.allFish.forEach( fish => fish._draw());
+        this.fishfood.forEach( food => food._draw());
         this.player._draw();
+        this.allJellyfish.forEach( jf => jf._draw());
         this.allEnemies.forEach( enemy => enemy._draw());
         this.shark.forEach( sh => sh._draw());
     }
@@ -111,14 +113,15 @@ class Game {
     }
 
     _generateFood() {
-        const amount = Math.floor(Math.random() * 3 + 2) + this.level;
+        const amount = Math.floor(Math.random() * 3 + 2);
         for (let i = 0; i<= amount; i++) this.fishfood.push(new Fishfood(ctx));
     }
 
-    _checkIfReadyToFightBigFish() {
-        if(this.player.strength >= 90 && this.player.w >= 250) {
+    _checkIfReadyToFightShark() {
+        if(this.player.strength >= 80 && this.player.w >= 100) {
             this._ctx.canvas.style.borderColor = 'red';
             this._ctx.canvas.style.borderWidth = '10px';
+            return true;
         }
     }
 
@@ -127,17 +130,18 @@ class Game {
         this._checkForFoodCollision();
 
         this.shark.forEach( sh => {
-            const collXWithPlayer = sh.x +10 < this.player.x + this.player.w && sh.x + sh.w > this.player.x ;
-            const collYWithPlayer = sh.y + (sh.h * 0.85) > this.player.y +10 && sh.y + (sh.h/ 2) < this.player.y + (this.player.h *0.85);
+            const collXWithPlayer = sh.x < (this.player.x + this.player.w) && (sh.x + sh.w) > this.player.x ;
+            const collYWithPlayer = (sh.y + sh.h)  > this.player.y && sh.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                if ((sh.x + sh.w) < (this.player.x + this.player.w/2) && sh.movesToLeft === false) {
+                if (this._checkIfReadyToFightShark()) {
+                    this._youWon()
+                } else if (sh.x > (this.player.x + this.player.w/2) && sh.movesToLeft) {
+                    sh._eating();
+                    this._gameOver();
+                } else if ((sh.x + sh.w) > this.player.x && sh.movesToLeft === false) {
                     sh._eating();
                     this._gameOver();
                 }
-                if (sh.x > (this.player.x + this.player.w/2) && sh.movesToLeft) {
-                    sh._eating();
-                    this._gameOver();
-                } 
             }
         });
 
@@ -172,14 +176,14 @@ class Game {
         });
 
         this.allFish.forEach( fish => {
-            const collXWithPlayer = fish.x +5 < (this.player.x + (this.player.w -5)) && fish.x + (fish.w -5) > this.player.x +5;
-            const collYWithPlayer = fish.y + (fish.h -5) > this.player.y +5 && fish.y +5 < this.player.y + (this.player.h -5);
+            const collXWithPlayer = fish.x  < (this.player.x + this.player.w) && (fish.x + fish.w) > this.player.x;
+            const collYWithPlayer = (fish.y + fish.h) > this.player.y && fish.y < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
-                if ((this.player.x + this.player.w) < (fish.x + fish.w/2) && this.player.movesToLeft === false) {
+                if ((this.player.x + this.player.w) < (fish.x + (fish.w/3)) && this.player.movesToLeft === false) {
                     this.player._eating();
                     this.allFish = this.allFish.filter( f => f !== fish);
                 }
-                if (this.player.x > (fish.x + fish.w/2) && this.player.movesToLeft) {
+                if (this.player.x > (fish.x + (fish.w/3)) && this.player.movesToLeft) {
                     this.player._eating();
                     this.allFish = this.allFish.filter( f => f !== fish);
                 } 
@@ -192,8 +196,8 @@ class Game {
             if(collXWithPlayer && collYWithPlayer && !this.player.hitByJellyFish) {
                 this.player.hitByJellyFish = true;
                 this.player._updateStrength('subtract');
-                this.player.w *= 0.90;
-                this.player.h *= 0.90;
+                this.player.w *= 0.95;
+                this.player.h *= 0.95;
                 this.player._resetHitByJellyfish();
             }
         });
@@ -234,11 +238,10 @@ class Game {
     }
 
     _hitCanvasBorder() {
-        if (this.player.x <= 0 || 
-            this.player.x + this.player.w >= this._ctx.canvas.width || 
-            this.player.y <= 0 || 
-            this.player.y + this.player.h >= this._ctx.canvas.height ) {
-            this._gameOver();
+        if (this.player.x <= 0 || this.player.x + this.player.w >= this._ctx.canvas.width) {
+            this.player._changeDirection('x');
+        } else if ( this.player.y <= 0 || this.player.y + this.player.h >= this._ctx.canvas.height ) {
+            this.player._changeDirection('y');
         }
     }
 
@@ -254,9 +257,15 @@ class Game {
             localStorage.setItem('sharkGameLevel', +this.level +1);
         }
        /*  this.audioYouWon.play(); */
+        clearInterval(this.intervalId);
+        this._ctx.fillStyle = 'white';
+        this._ctx.textAlign = 'center';
+        this._ctx.font = '6rem Arial';
+        this._ctx.fillText('You won!!!', this._ctx.canvas.width / 2 , this._ctx.canvas.height / 2);
         const continueBtn = document.getElementById('continue-btn');
         continueBtn.style.display = 'flex';
         continueBtn.onclick = () => {
+            this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
             location.reload();
         }
     }
@@ -275,6 +284,7 @@ class Game {
             const playAgainBtn = document.getElementById('play-again-btn');
             playAgainBtn.style.display = 'flex';
             playAgainBtn.onclick = () => {
+                this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
                 location.reload();
             }
 

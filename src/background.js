@@ -2,10 +2,8 @@ class Background {
     constructor(ctx) {
         this._ctx = ctx;
         this._img = new Image;
-        //this._img.src = '../images/TransparentBackground.png';
         this._img.src = '../images/background.png';
 
-        // this.y = 300;
         this.h = 500;
         this.w = this._ctx.canvas.width;
         this.x = 0;

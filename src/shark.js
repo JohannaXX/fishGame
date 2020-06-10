@@ -3,19 +3,19 @@ class Shark extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.level = level;
-        this.alterTimerCounter = 0;
+        this.alertTimerCounter = 0;
         this.alertTimer = setInterval(() => {
-            this.alterTimerCounter++;
+            this.alertTimerCounter++;
         }, 500);;
 
         this.y = Math.floor(Math.random() * (this._ctx.canvas.height - 200));
         this.w = 300;
         this.h = 150;
-        this.vx = 30;
+        this.vx = 35;
         this.vy = 0;
 
         this._img = new Image;
-        this._img.src = '../images/sharkReduced.png';
+        this._img.src = '../images/shark.png';
         this._img.frames = 3;
         this._img.rows = 4;
         this._img.frameIndex = 0;
@@ -35,7 +35,7 @@ class Shark extends Enemy {
 
     _draw() {   
         if(this.movesToLeft) {
-            if(this.alterTimerCounter < 4) {
+            if(this.alertTimerCounter < 4) {
                 this._ctx.fillStyle = 'red';
                 this._ctx.fillRect((this._ctx.canvas.width-30), this.y, 30, 150);
             } 
@@ -51,7 +51,7 @@ class Shark extends Enemy {
                 this.h
             );
         } else {
-            if(this.alterTimerCounter < 4) {
+            if(this.alertTimerCounter < 4) {
                 this._ctx.fillStyle = 'red';
                 this._ctx.fillRect(0, this.y, 30, 150);
             } 
