@@ -1,24 +1,26 @@
 # Fish Game
 
-## Basic rules:
+## GAME GOAL
+test
+![](./images/startPage-player.png)
 
-- bigger fish eat smaller fish.
-- when a fish eats, it gets bigger.
-- when a fish does not eat in X seconds, it gets smaller.
-- if a fish tries to eat a fish of its own size, it has a 50% chance to succeed.
-- smaller fish are faster than bigger fish.
+<!--  this is you and you will need to fight the shark _
+However, you can only win if you are big and strong enough!
 
-### Jollies:
+## HINTS
 
-- fish food (watch out, only the yellow food is good for you)
-- sleeping small fish
+Eat as much:
+_ fish to grow,
+_ yellow food to become stronger
 
-### Obstacles:
+and be careful:
+_ bad red food makes you weaker
+_ jellyfish make you smaller
+_ piranhas will kill you!
 
-- bigger fish
-- fishing lure (you have a 50% chance to survive)
-- electric eel (if you touch it, you will die, no matter what size you are!)
+When you are big and strong enough the image border turns red and you can attempt to attack the shark!
 
-### Game end:
 
-- you will need to eat Orca, the the biggest fish of the lake, so that the lake is yours!
+Good luck!
+ -->
+

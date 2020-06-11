@@ -3,7 +3,7 @@ class Player extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.energy = 100;
-        this.strength = 40;
+        this.strength = 100;
         this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;
@@ -17,7 +17,7 @@ class Player extends Enemy {
         this._img.frameIndex = 0;
         this._img.rows = 5;
         this._img.rowCutIndex = this.movesToLeft ? 0 : 2;
-        this.w = 50;
+        this.w = 100;
         this.h = this.w * 0.7;
         this.x = (this._ctx.canvas.width / 2) - (this.w / 2);
         this.y = (this._ctx.canvas.height / 2) - (this.h / 2);
