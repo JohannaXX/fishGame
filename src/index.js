@@ -8,13 +8,18 @@ const welcomingPage = document.getElementById('welcoming-page');
 const levelTextField = document.getElementById('level');
 const verticalText = document.getElementsByClassName('vertical-text');
 
-/* startBtn.onclick = () => {
-    welcomingPage.style.display = 'none'; */
-    //levelTextField.style.display = 'flex'; 
-   /*  [...verticalText].forEach(text => text.style.display = 'flex');
+const startTheGame = () => {
+    welcomingPage.style.display = 'none'; 
+    levelTextField.style.display = 'flex'; 
+    [...verticalText].forEach(text => text.style.display = 'flex');
     game.start(); 
     document.getElementById('welcoming-page').style.display = 'none'
-} */
+}
 
+startBtn.onclick = () => {
+    startTheGame();
+}
 
-game.start(); 
+if(localStorage.getItem('sharkGameLevel')) {
+    startTheGame();
+}

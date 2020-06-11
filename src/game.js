@@ -6,10 +6,10 @@ class Game {
         this.level = 1;
         this.roundWon = false;
 
-        /* this.audio = new Audio ('../audios/inTheWater.mp3');
+        this.audio = new Audio ('../audios/inTheWater.mp3');
         this.audio.loop = true;
         this.audioGameOver = new Audio ('../audios/gameOver.mp3');
-        this.audioYouWon = new Audio ('../audios/youWon.mp3'); */
+        this.audioYouWon = new Audio ('../audios/youWon.mp3');
         this.background = new Background(ctx);
         this.fishfood = [];
         this.player = new Player();
@@ -28,7 +28,7 @@ class Game {
         const showLevel = document.getElementById('level-number');
         showLevel.innerHTML = this.level;
 
-        /* this.audio.play(); */
+        this.audio.play();
         for (let i = 0; i< (1*this.level); i++) this.allFish.push(new Fish(ctx, this.level));
         for (let i = 0; i< (1*this.level); i++) this.allEnemies.push(new Enemy(ctx));
         this.allJellyfish.push(new Jellyfish(ctx));
@@ -50,7 +50,7 @@ class Game {
             if (this.intervalCounter % (400 / Math.ceil(this.level / 2)) === 0) {
                 this.allEnemies.push(new Enemy(ctx))
             }
-            if (this.intervalCounter % (300 / Math.ceil(this.level / 2)) === 0 /* && this.intervalCounter !== 0 */) {
+            if (this.intervalCounter % (300 / Math.ceil(this.level / 2)) === 0) {
                this._generateFood();
             }
             if (this.intervalCounter % 500 === 0 && this.intervalCounter !== 0) {
@@ -131,10 +131,14 @@ class Game {
 
         this.shark.forEach( sh => {
             const collXWithPlayer = sh.x < (this.player.x + this.player.w) && (sh.x + sh.w) > this.player.x ;
-            const collYWithPlayer = (sh.y + sh.h)  > this.player.y && sh.y < (this.player.y + this.player.h);
+            const collYWithPlayer = (sh.y + sh.h)  > this.player.y && (sh.y +40) < (this.player.y + this.player.h);
             if(collXWithPlayer && collYWithPlayer) {
                 if (this._checkIfReadyToFightShark()) {
-                    this._youWon()
+                    if ((sh.movesToLeft && !this.player.movesToLeft) || (!sh.movesToLeft && this.player.movesToLeft)) {
+                        this._youWon()
+                    } else {
+                        this._gameOver();
+                    }
                 } else if (sh.x > (this.player.x + this.player.w/2) && sh.movesToLeft) {
                     sh._eating();
                     this._gameOver();
@@ -256,7 +260,7 @@ class Game {
             this.roundWon = true;
             localStorage.setItem('sharkGameLevel', +this.level +1);
         }
-       /*  this.audioYouWon.play(); */
+        this.audioYouWon.play();
         clearInterval(this.intervalId);
         this._ctx.fillStyle = 'white';
         this._ctx.textAlign = 'center';
@@ -271,8 +275,8 @@ class Game {
     }
 
     _gameOver() {
-        /* this.audio.loop = false;
-        this.audioGameOver.play(); */
+        this.audio.loop = false;
+        this.audioGameOver.play();
         setTimeout(() => {
             
             clearInterval(this.intervalId);
@@ -287,12 +291,11 @@ class Game {
                 this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
                 location.reload();
             }
-
-            /* console.log(this.allEnemies);
+            console.log(this.allEnemies);
             console.log(this.fishfood);
             console.log(this.allFish);
             console.log(this.fishfood);
-            console.log(this.shark); */
+            console.log(this.shark);
         }, 500);
         
     }

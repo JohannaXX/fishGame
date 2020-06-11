@@ -3,13 +3,13 @@ class Player extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.energy = 100;
-        this.strength = 100;
+        this.strength = 40;
         this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;
-        /* this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
+        this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
         this.audioEatFish = new Audio('../audios/eatingFish.mp3');
-        this.audioOpenMouth = new Audio('../audios/openMouth.mp3'); */
+        this.audioOpenMouth = new Audio('../audios/openMouth.mp3');
 
         this._img = new Image;
         this._img.src = '../images/player.png';
@@ -52,7 +52,6 @@ class Player extends Enemy {
             this.eatingInterval = false;
             const countInterval = setInterval(() => {
                 this.eatingInterval = true;
-
                 this.energy -= 10
             }, 1000);   
         }
@@ -92,7 +91,7 @@ class Player extends Enemy {
     }
 
     _eating() {
-       /*  this.audioEatFish.play(); */
+        this.audioEatFish.play();
         if (this.movesToLeft) {
             this._img.frameIndex = 0; 
             this._img.rowCutIndex = 1;
@@ -184,7 +183,7 @@ class Player extends Enemy {
                 if (this.strength <= 0 ) {
                     this.strength = 0;
                 }
-                /* this.audioReduceSize.play(); */
+                this.audioReduceSize.play();
                 break;
         }
         strengthArea.style.height = (`${100-this.strength}%`);

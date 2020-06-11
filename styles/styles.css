@@ -97,6 +97,14 @@ button {
     color: rgb(0, 33, 53);
 }
 
+main {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    width: 100vw;
+}
+
 #welcoming-page {
     position: absolute;
     display: flex;
@@ -164,14 +172,6 @@ button {
     font-size: 1rem;
     padding: initial;
     border: 2px solid blue;
-}
-
-main {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    width: 100vw;
 }
 
 .vertical-text {
