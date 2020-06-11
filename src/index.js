@@ -10,7 +10,7 @@ const verticalText = document.getElementsByClassName('vertical-text');
 
 /* startBtn.onclick = () => {
     welcomingPage.style.display = 'none'; */
-    levelTextField.style.visibility = 'visible'; 
+    //levelTextField.style.display = 'flex'; 
    /*  [...verticalText].forEach(text => text.style.display = 'flex');
     game.start(); 
     document.getElementById('welcoming-page').style.display = 'none'

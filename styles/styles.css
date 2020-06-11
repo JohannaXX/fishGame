@@ -43,8 +43,7 @@ header > h1 {
 }
 
 #level {
-    visibility: hidden;
-    display: flex;
+    display: none;
     flex-direction: row;
     max-width: 10rem;
     padding: 10px;
@@ -100,6 +99,8 @@ button {
 
 #welcoming-page {
     position: absolute;
+    display: flex;
+    justify-content: center;
     width: 100vw;
     height: 100vh;
     left: 0;
@@ -110,9 +111,59 @@ button {
     color: #c1ebfc;
 }
 
+#welcoming-page-container {
+    width: 60vw;
+    align-items: center;
+}
+
+#welcoming-page-container > * {
+    padding-top: 20px;
+}
+
+#hint-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#welcoming-page p {
+    display: inline;
+}
+
+#welcoming-page ul {
+    text-align: left;
+    width: 50%;
+    margin: auto;
+}
+
+#welcoming-page li {
+    text-align: left;
+    line-height: 4rem;
+    vertical-align: middle;
+}
+
+#welcoming-page img {
+    vertical-align: middle;
+}
+
+#welcoming-page img:nth-of-type(2) {
+    max-width: 180px;
+}
+
+#canvas-preview {
+    display: block;
+    max-width: 100%;
+    padding: 40px 0;
+    margin: auto;
+}
+
 #start-btn {
-    margin-top: 20px;
+    margin: 40px auto;
+    width: 6rem;
     font-size: 1rem;
+    padding: initial;
+    border: 2px solid blue;
 }
 
 main {

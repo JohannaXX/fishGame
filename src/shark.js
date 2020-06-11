@@ -36,7 +36,7 @@ class Shark extends Enemy {
     _draw() {   
         if(this.movesToLeft) {
             if(this.alertTimerCounter < 4) {
-                this._ctx.fillStyle = 'red';
+                this._ctx.fillStyle = 'orange';
                 this._ctx.fillRect((this._ctx.canvas.width-30), this.y, 30, 150);
             } 
             this._ctx.drawImage(
