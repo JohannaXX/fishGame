@@ -20,10 +20,11 @@ and be careful:
 - ![](./images/startPage-piranha.png) piranhas will kill you!
 
 When you are big and strong enough the image border turns red and you can attempt to attack the shark!
+Remember to face the shark when attacking
 
 ![](./images/startPage-redBorder.png)
 
-
+Use the arrow keys &larr;, &uarr;, &rarr; and &darr; to move around.
 Good luck!
 
 
