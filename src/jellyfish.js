@@ -4,7 +4,7 @@ class Jellyfish extends Fish {
         this._ctx = ctx;
 
         this._img = new Image;
-        this._img.src = '../images/jellyfish.png';
+        this._img.src = './images/jellyfish.png';
         this._img.frames = 2;
         this._img.rows = 8;
         this._img.frameIndex = 0;

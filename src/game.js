@@ -6,10 +6,10 @@ class Game {
         this.level = 1;
         this.roundWon = false;
 
-        this.audio = new Audio ('../audios/inTheWater.mp3');
+        this.audio = new Audio ('./audios/inTheWater.mp3');
         this.audio.loop = true;
-        this.audioGameOver = new Audio ('../audios/gameOver.mp3');
-        this.audioYouWon = new Audio ('../audios/youWon.mp3');
+        this.audioGameOver = new Audio ('./audios/gameOver.mp3');
+        this.audioYouWon = new Audio ('./audios/youWon.mp3');
         this.background = new Background(ctx);
         this.fishfood = [];
         this.player = new Player();

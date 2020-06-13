@@ -15,7 +15,7 @@ class Shark extends Enemy {
         this.vy = 0;
 
         this._img = new Image;
-        this._img.src = '../images/shark.png';
+        this._img.src = './images/shark.png';
         this._img.frames = 3;
         this._img.rows = 4;
         this._img.frameIndex = 0;

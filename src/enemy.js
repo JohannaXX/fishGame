@@ -10,7 +10,7 @@ class Enemy {
         this.vy = (Math.random() * 3 * (Math.random() < 0.5 ? -1 : 1));
 
         this._img = new Image;
-        this._img.src = '../images/enemy.png';
+        this._img.src = './images/enemy.png';
         this._img.frames = 6;
         this._img.frameIndex = 0;
         this._img.rows = 5;

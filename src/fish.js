@@ -11,7 +11,7 @@ class Fish {
 
         this._img = new Image;
         const getRandomImage = Math.ceil(Math.random() * 5);
-        this._img.src = `../images/fish${getRandomImage}.png`;
+        this._img.src = `./images/fish${getRandomImage}.png`;
         this._img.frames = 6;
         this._img.rows = 2;
         this._img.frameIndex = 0;

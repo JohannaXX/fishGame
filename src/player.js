@@ -7,12 +7,12 @@ class Player extends Enemy {
         this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;
-        this.audioReduceSize = new Audio('../audios/reduceSize.mp3');
-        this.audioEatFish = new Audio('../audios/eatingFish.mp3');
-        this.audioOpenMouth = new Audio('../audios/openMouth.mp3');
+        this.audioReduceSize = new Audio('./audios/reduceSize.mp3');
+        this.audioEatFish = new Audio('./audios/eatingFish.mp3');
+        this.audioOpenMouth = new Audio('./audios/openMouth.mp3');
 
         this._img = new Image;
-        this._img.src = '../images/player.png';
+        this._img.src = './images/player.png';
         this._img.frames = 6;
         this._img.frameIndex = 0;
         this._img.rows = 5;
