@@ -78,16 +78,19 @@ class Game {
             }
         })
         this.fishfood.forEach( food => {
-            if (food.x < 0 || 
-                food.x + food.w > this._ctx.canvas.width || 
-                food.y < 0 || 
-                food.y + food.h > this._ctx.canvas.height ) {
+            if (food.y + food.r > this._ctx.canvas.height) {
                     this.fishfood = this.fishfood.filter( f => f !== food);
             }
         })
         this.allFish.forEach( fish => {
             if (fish.x < 0 || fish.x + fish.w > this._ctx.canvas.width ) {
-                    this.allFish = this.allFish.filter( f => f !== fish);
+                this.allFish = this.allFish.filter( f => f !== fish);
+            }
+        })
+
+        this.shark.forEach( sh => {
+            if (sh.x < 0 || sh.x + sh.w > this._ctx.canvas.width ) {
+                this.shark = this.shark.filter( s => s !== sh);
             }
         })
     }
@@ -261,6 +264,9 @@ class Game {
             localStorage.setItem('sharkGameLevel', +this.level +1);
         }
         this.audioYouWon.play();
+        this.audio.pause();
+        this.audio.loop = false;
+
         clearInterval(this.intervalId);
         this._ctx.fillStyle = 'white';
         this._ctx.textAlign = 'center';
@@ -275,8 +281,9 @@ class Game {
     }
 
     _gameOver() {
-        this.audio.loop = false;
         this.audioGameOver.play();
+        this.audio.pause();
+        this.audio.loop = false;
         setTimeout(() => {
             
             clearInterval(this.intervalId);
@@ -291,11 +298,6 @@ class Game {
                 this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
                 location.reload();
             }
-            console.log(this.allEnemies);
-            console.log(this.fishfood);
-            console.log(this.allFish);
-            console.log(this.fishfood);
-            console.log(this.shark);
         }, 500);
         
     }

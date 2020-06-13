@@ -126,20 +126,20 @@ class Player extends Enemy {
             switch (e.keyCode) {
                 case UP:
                     this.y -= 4;
-                    this.vy -= 0.3;
+                    this.vy -= 0.4;
                     break;
                 case DOWN:
                     this.y += 4;
-                    this.vy += 0.3;
+                    this.vy += 0.4;
                     break;
                 case RIGHT:
                     this.x += 4;
-                    this.vx += 0.3;
+                    this.vx += 0.4;
                     if(this.movesToLeft) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
                     break;
                 case LEFT:
                     this.x -= 4;
-                    this.vx -= 0.3;
+                    this.vx -= 0.4;
                     if(!this.movesToLeft) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
                     break;
           }
@@ -158,10 +158,12 @@ class Player extends Enemy {
                 case RIGHT:
                     this.x += 0
                     this.vx -= 0.2;
+                    if(this.movesToLeft) {this.movesToLeft = false; this._img.rowCutIndex = 2;}
                     break;
                 case LEFT:
                     this.x -= 0
                     this.vx += 0.2;
+                    if(!this.movesToLeft) {this.movesToLeft = true; this._img.rowCutIndex = 0;}
                     break;
           }
         })
