@@ -24,7 +24,6 @@ class Game {
         const getLevel = localStorage.getItem('sharkGameLevel');
         if (+getLevel > this.level)  this.level = getLevel;
 
-
         const showLevel = document.getElementById('level-number');
         showLevel.innerHTML = this.level;
 

@@ -3,7 +3,7 @@ class Player extends Enemy {
         super(ctx);
         this._ctx = ctx;
         this.energy = 100;
-        this.strength = 40;
+        this.strength = 20;
         this.eatingInterval = true;
         this.isDead = false;
         this.hitByJellyFish = false;

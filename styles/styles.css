@@ -62,7 +62,7 @@ header > h1 {
         top: 1rem;
         border: 1px solid rgb(0, 33, 53);
     }
-  }
+}
 
 #level-number {
     margin-left: 10px;
@@ -176,12 +176,28 @@ main {
     margin: auto;
 }
 
-#start-btn {
+#gotIt-btn {
     margin: 40px auto;
     width: 6rem;
     font-size: 1rem;
     padding: initial;
     border: 2px solid white;
+}
+
+#start-btn {
+    display: none;
+    position: absolute;
+    top: 45vh;
+    width: 120px;
+    height: 80px;
+    margin: auto;
+    font-size: 2rem;
+}
+
+@media screen and (max-width: 1500px) {
+    #start-btn {
+        top: 40vh;
+    }
 }
 
 .vertical-text {
