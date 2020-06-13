@@ -130,6 +130,7 @@ main {
 }
 
 #welcoming-page-container {
+    display: block;
     width: 60vw;
     align-items: center;
 }
