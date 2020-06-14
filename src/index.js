@@ -31,7 +31,6 @@ startBtn.onclick = () => {
 }
 
 helpBtn.onclick = () => {
-    console.log('help-btn triggered');
     welcomingPage.style.display = 'flex';
     levelTextField.style.display = 'none'; 
     [...verticalText].forEach(text => text.style.display = 'none');

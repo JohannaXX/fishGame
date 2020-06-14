@@ -12,7 +12,7 @@ class Game {
         this.audioYouWon = new Audio ('./audios/youWon.mp3');
         this.background = new Background(ctx);
         this.fishfood = [];
-        this.player = new Player();
+        this.player;
         this.allEnemies = [];
         this.allFish = [];
         this.allJellyfish = [];
@@ -27,6 +27,7 @@ class Game {
         const showLevel = document.getElementById('level-number');
         showLevel.innerHTML = this.level;
 
+        this.player = new Player();
         this.audio.play();
         for (let i = 0; i< (1*this.level); i++) this.allFish.push(new Fish(ctx, this.level));
         for (let i = 0; i< (1*this.level); i++) this.allEnemies.push(new Enemy(ctx));
