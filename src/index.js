@@ -22,6 +22,8 @@ const deactivateWelcomingPage = () => {
 
 gotItBtn.onclick = () => {
     location.reload();
+    deactivateWelcomingPage();
+    localStorage.setItem('sharkGameLevel', game.level?  game.level : 1);
 }
 
 startBtn.onclick = () => {
